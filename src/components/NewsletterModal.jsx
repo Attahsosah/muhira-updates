@@ -1,23 +1,24 @@
+"use client";
+
 import { useState, useEffect, useRef } from "react";
 
 const NewsletterModal = () => {
-  console.log('NewsletterModal rendered');
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const modalRef = useRef(null); // Reference to the modal container
+  const modalRef = useRef(null);
 
   useEffect(() => {
     const hasSeenModal = sessionStorage.getItem("newsletterModalShown");
     if (!hasSeenModal) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setShowModal(true);
         sessionStorage.setItem("newsletterModalShown", "true");
-      }, 800); // slight delay to feel natural
+      }, 800);
+      return () => clearTimeout(timer);
     }
   }, []);
 
-  // Close modal when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -60,7 +61,7 @@ const NewsletterModal = () => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-100 transition-opacity">
       <div
-        ref={modalRef} // Attach the ref to the modal container
+        ref={modalRef}
         className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 relative animate-fade-in-down"
       >
         <button
@@ -93,7 +94,8 @@ const NewsletterModal = () => {
         ) : (
           <div className="text-center">
             <h3 className="text-green-600 font-semibold text-lg">Thanks for subscribing!</h3>
-            <p className="text-sm text-gray-500">You're now on our list. 🎉</p>
+            {/* The apostrophe below is now escaped to fix the build error */}
+            <p className="text-sm text-gray-500">You&apos;re now on our list. 🎉</p>
           </div>
         )}
       </div>

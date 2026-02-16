@@ -14,8 +14,6 @@ const GlobalSearch = () => {
   const searchRef = useRef(null);
   const router = useRouter();
 
-  // Helper: Mapping common search terms to your Firestore Subcategory IDs
-  // Add any new subcategories you create here
   const subcategoryMap = {
     "mobile": "mobile-phones",
     "phones": "mobile-phones",
@@ -27,7 +25,7 @@ const GlobalSearch = () => {
     "television": "tvs",
     "tv": "tvs",
     "helmet": "helmets",
-    "advertising": "accesories", // Handling your specific 'misc' typo
+    "advertising": "accesories", 
     "electronics": "electronics"
   };
 
@@ -54,8 +52,6 @@ const GlobalSearch = () => {
 
     try {
       const keywords = val.toLowerCase().trim().split(/\s+/);
-      
-      // Find which subcategory IDs match the user's keywords
       const matchedIds = keywords
         .map(kw => subcategoryMap[kw])
         .filter(id => id !== undefined);
@@ -64,7 +60,6 @@ const GlobalSearch = () => {
       let combinedResults = [];
 
       for (const colName of collections) {
-        // Fetching more items to ensure we find matches locally
         const snap = await getDocs(query(collection(db, colName), limit(80)));
         const data = snap.docs.map(doc => ({
           id: doc.id,
@@ -78,10 +73,7 @@ const GlobalSearch = () => {
           const itemSubcat = item.subcategory?.toLowerCase() || "";
           const itemType = item.type?.toLowerCase() || "";
 
-          // 1. Check if subcategory ID matches our map
           const matchesSubcatId = matchedIds.some(id => itemSubcat.includes(id) || itemType.includes(id));
-
-          // 2. Check if keywords are in text fields
           const matchesKeywords = keywords.every(kw => 
             title.includes(kw) || 
             desc.includes(kw) || 
@@ -136,7 +128,7 @@ const GlobalSearch = () => {
              <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                 <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-500">
-                  {loading ? "Searching..." : `${results.length} results for "${searchTerm}"`}
+                  {loading ? "Searching..." : `${results.length} results for &quot;${searchTerm}&quot;`}
                 </h3>
              </div>
           </div>
@@ -152,7 +144,7 @@ const GlobalSearch = () => {
                   <div className="aspect-[4/5] rounded-[24px] bg-gray-50 overflow-hidden mb-4 border border-gray-100 group-hover:border-[#bd8b31] group-hover:shadow-2xl group-hover:shadow-[#bd8b31]/10 transition-all duration-500">
                     <img 
                       src={item.images?.[0] || item.image} 
-                      alt="" 
+                      alt={item.title || "Product Image"} 
                       className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
                     />
                   </div>
@@ -169,7 +161,7 @@ const GlobalSearch = () => {
               <div className="w-full py-16 text-center">
                 <div className="text-4xl mb-4">🔍</div>
                 <p className="text-gray-900 font-bold">No items found</p>
-                <p className="text-gray-400 text-sm mt-1">Try searching for "Electronics", "Cars" or "Houses"</p>
+                <p className="text-gray-400 text-sm mt-1">Try searching for &quot;Electronics&quot;, &quot;Cars&quot; or &quot;Houses&quot;</p>
               </div>
             )}
             

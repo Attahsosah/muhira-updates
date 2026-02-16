@@ -8,7 +8,7 @@ function Dev() {
     return (
       <div className="bg-gray-900" >
          <Navbar />
-         <Nav />
+         {/* <Nav /> */}
          <Newsletter />
          <Footer />
       </div>
