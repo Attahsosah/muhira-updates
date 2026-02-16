@@ -66,7 +66,7 @@ useEffect(function mount() {
           <Link href="/" className="text-[#bd8b31] font-bold text-xl cursor-pointer p-2">
 
             <div className="flex items-center space-x-[8px]">
-            <Image className="bg-white rounded-full " src="https://i.ibb.co/CbJfm8L/muhiralogo.jpg" height={50} width={50} />
+            <Image className="bg-white rounded-full " src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={50} width={50} />
                <p className="text-[#bd8b31] font-bold ">Muhira Updates </p> 
             </div>
           </Link>

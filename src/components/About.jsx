@@ -60,7 +60,7 @@ function About() {
                 </div>
         
 
-                <button className="bg-[#bd8b31]  text-gray-200 mt-[20px] flex mx-auto text-center px-[10px] py-[15px] rounded-md">Shop Now</button>
+                {/* <button className="bg-[#bd8b31]  text-gray-200 mt-[20px] flex mx-auto text-center px-[10px] py-[15px] rounded-md">Shop Now</button> */}
 
 
         </div>

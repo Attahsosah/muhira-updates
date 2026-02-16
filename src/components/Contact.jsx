@@ -113,7 +113,7 @@ function Contact() {
             <div className="hidden lg:order-2 md:order-1 relative   lg:block  bg-black opacity-90 md:w-[500px]  "> 
                 {/* <Map className="w-[500px] ml-[30px]"/> */}
                 <div className='p-52 pt-[100px]'>
-                         <Image className="relative w-[148px] animate-pulse bg-[#003a0f]  rounded-full " src="https://i.ibb.co/CbJfm8L/muhiralogo.jpg" height={50} width={50} />
+                         <Image className="relative w-[148px] animate-pulse bg-[#003a0f]  rounded-full " src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={50} width={50} />
                         <h1 data-aos='zoom-in-up' data-aos-duration='3000' className='flex text-[#bd8b31] pl-[24px] pt-2 text-[52px] font-sans'>M U H </h1>
                         <h1 data-aos='zoom-in-up' data-aos-duration='3000' className='flex text-[#bd8b31] pl-[30px] pt-2 text-[52px] font-sans'>I </h1>
                         <h1 data-aos='zoom-in-up' data-aos-duration='3000' className='flex text-[#bd8b31] pl-[30px] pt-2 text-[52px] font-sans'>R</h1>

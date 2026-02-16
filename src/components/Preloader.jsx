@@ -38,7 +38,7 @@ function Preloader() {
               duration: 1.5,
             }}
           >
-            <Image className="bg-white rounded-full" src="https://i.ibb.co/CbJfm8L/muhiralogo.jpg" height={200} width={200} />
+            <Image className="bg-white rounded-full" src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={200} width={200} />
           </motion.div>
           {/* <motion.p
             initial={{

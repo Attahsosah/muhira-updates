@@ -131,7 +131,7 @@ function MiscDetailPage({ product }) {
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                         <div className="flex items-center gap-4 mb-4">
                             <div className="h-12 w-12 rounded-full overflow-hidden border border-gray-100">
-                                <Image src="https://i.ibb.co/CbJfm8L/muhiralogo.jpg" height={48} width={48} alt="Logo" />
+                                <Image src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={48} width={48} alt="Logo" />
                             </div>
                             <div>
                                 <p className="font-black text-gray-900 uppercase text-sm">Muhira Updates Official</p>

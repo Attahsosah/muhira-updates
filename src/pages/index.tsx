@@ -26,7 +26,7 @@ export default function Home() {
         <title>Muhira Updates | Logistics Company</title>
         <link
           rel="icon"
-          href="https://i.ibb.co/CbJfm8L/muhiralogo.jpg"/>
+          href="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg"/>
         <meta
           name="description"
           content="At Muhira, we are not just an eCommerce store; we are your reliable partner in bringing the world of shopping to your fingertips. Based in the heart of Burundi, we understand the unique needs of our community, and we're on a mission to redefine the online shopping experience!"
