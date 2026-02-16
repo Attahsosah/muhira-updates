@@ -150,7 +150,7 @@ useEffect(function mount() {
       <nav className="block lg:hidden fixed w-[100%] z-[130] top-0">
             <div className=" flex justify-between  py-[0px] px-[5px] w-[100%] bg-black">
               <Link href="/">
-                <Image className="bg-white rounded-full" src="https://i.ibb.co/CbJfm8L/muhiralogo.jpg" height={50} width={50} />
+                <Image className="bg-white rounded-full" src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={50} width={50} />
 
               </Link>
 
