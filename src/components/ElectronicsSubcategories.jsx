@@ -30,7 +30,7 @@ const ElectronicsSubcategories = () => {
       >
         <Image
           fill
-          src="https://i.ibb.co/M80VTvz/pexels-atccommphoto-306763.jpg"
+          src="https://i.ibb.co/2YtkYYJs/Electronics.jpg"
           alt="Electronics"
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />

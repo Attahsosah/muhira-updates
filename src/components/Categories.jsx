@@ -31,7 +31,7 @@ const Categories = () => {
           <ScrollReveal>
             <div className="group relative h-[180px] w-full cursor-pointer rounded-2xl overflow-hidden shadow-md transition-all duration-300">
               <Image
-                src="https://i.ibb.co/H2Zshyt/pexels-davidguerrero-14999946.jpg"
+                src="https://i.ibb.co/DDdz5JsM/Advertising.jpg"
                 alt="Advertising Equipment"
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -56,7 +56,7 @@ const Categories = () => {
           <ScrollReveal>
             <div className="group relative h-[180px] w-full cursor-pointer rounded-2xl overflow-hidden shadow-md transition-all duration-300">
               <Image
-                src="https://i.ibb.co/pQ0c3dK/pexels-lokomotywa-744922.jpg"
+                src="https://i.ibb.co/rGC9q5pk/Safety.jpg"
                 alt="Safety Equipment"
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
