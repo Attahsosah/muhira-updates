@@ -1,95 +1,56 @@
-import { useContext } from "react";
-import { SelectedCategoryContext } from "./context/CarCardContext";
-import { SelectedTypeContext } from "./context/MiscContext";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import ScrollReveal from "../components/ScrollReveal";
 import ElectronicsSubcategories from "./ElectronicsSubcategories";
-import HomepageSubList from "./HomepageSubList";
+import AdvertisingSubcategories from "./AdvertisingSubcategories";
+import SafetySubcategories from "./SafetySubcategories";
 
 const Categories = () => {
-  const [selectedCategory, setSelectedCategory] = useContext(SelectedCategoryContext);
-  const [selectedType, setSelectedType] = useContext(SelectedTypeContext);
-  const router = useRouter();
-
-  const handleCategoryClick = (category) => {
-    router.push(`/miscType/${category}`);
-  };
-
   return (
     <div id="categories" className="flex justify-center mt-10 px-4">
       <div className="w-full max-w-7xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Adjusted gap to 10 to allow room for expanded subcategory grids */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           
-          {/* Electronics */}
+          {/* Electronics Section */}
           <ScrollReveal>
             <ElectronicsSubcategories />
           </ScrollReveal>
 
-          {/* Advertising Equipment (Accessories) */}
+          {/* Advertising Equipment Section */}
           <ScrollReveal>
-            <div className="group relative h-[180px] w-full cursor-pointer rounded-2xl overflow-hidden shadow-md transition-all duration-300">
-              <Image
-                src="https://i.ibb.co/DDdz5JsM/Advertising.jpg"
-                alt="Advertising Equipment"
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              {/* Darker gradient for better text legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-              
-              <div className="absolute inset-0 p-4 flex flex-col justify-end">
-                <div onClick={() => handleCategoryClick("accessories")}>
-                  <p className="text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-1">
-                    Advertising Equipment
-                  </p>
-                </div>
-                
-                {/* Dynamic List */}
-                <HomepageSubList parentCategory="accessories" />
-              </div>
-            </div>
+            <AdvertisingSubcategories />
           </ScrollReveal>
 
-          {/* Safety Equipment */}
+          {/* Safety Equipment Section */}
           <ScrollReveal>
-            <div className="group relative h-[180px] w-full cursor-pointer rounded-2xl overflow-hidden shadow-md transition-all duration-300">
-              <Image
-                src="https://i.ibb.co/rGC9q5pk/Safety.jpg"
-                alt="Safety Equipment"
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-              
-              <div className="absolute inset-0 p-4 flex flex-col justify-end">
-                <div onClick={() => handleCategoryClick("safety")}>
-                  <p className="text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-1">
-                    Safety Equipment
-                  </p>
-                </div>
-
-                {/* Dynamic List */}
-                <HomepageSubList parentCategory="safety" />
-              </div>
-            </div>
+            <SafetySubcategories />
           </ScrollReveal>
 
-          {/* Website Development */}
+          {/* Website Development - Kept as a direct link as it's a separate service */}
           <ScrollReveal>
             <Link href="/dev">
-              <div className="relative h-[180px] w-full cursor-pointer rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition">
+              <div className="relative h-[180px] w-full cursor-pointer rounded-3xl overflow-hidden shadow-xl group transition-all duration-500 hover:scale-[1.01]">
                 <Image
                   src="https://i.ibb.co/tJJGx8m/pexels-junior-teixeira-1064069-2047905.jpg"
                   alt="Website Development"
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <p className="absolute bottom-4 left-4 font-bold text-white uppercase text-sm sm:text-base tracking-widest">
-                  Website Development
-                </p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 text-center px-4">
+                   <span className="text-[10px] bg-[#bd8b31] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2">
+                    Digital Services
+                  </span>
+                  <h2 className="text-2xl font-black uppercase tracking-tighter mb-1">
+                    Web Development
+                  </h2>
+                  <div className="mt-2 text-[9px] font-black uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
+                    Build Your Vision →
+                  </div>
+                </div>
               </div>
             </Link>
           </ScrollReveal>

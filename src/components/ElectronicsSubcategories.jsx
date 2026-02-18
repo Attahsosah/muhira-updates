@@ -47,10 +47,7 @@ const ElectronicsSubcategories = () => {
             Electronics
           </h2>
           
-          <p className="text-xs opacity-90 font-medium mb-4 max-w-[250px]">
-            Discover the latest mobile devices, laptops, and premium audio gear.
-          </p>
-
+          
           <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all group-hover:bg-[#bd8b31] group-hover:text-white">
             <span>{isExpanded ? "View Less" : "Explore Categories"}</span>
             {isExpanded ? <FaChevronUp size={10} /> : <FaChevronDown size={10} />}
