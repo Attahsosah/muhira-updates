@@ -13,14 +13,13 @@ const AdvertisingSubcategories = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // Fetch real subcategories from Firestore
   useEffect(() => {
     const fetchRealSubs = async () => {
       setLoading(true);
       try {
         const q = query(
           collection(db, "subcategories"), 
-          where("parentCategory", "==", "accessories") // Use "safety" for the other component
+          where("parentCategory", "==", "accessories")
         );
         const snap = await getDocs(q);
         const fetchedSubs = snap.docs.map(doc => ({
@@ -38,7 +37,7 @@ const AdvertisingSubcategories = () => {
     if (isExpanded && subcategories.length === 0) {
       fetchRealSubs();
     }
-  }, [isExpanded]);
+  }, [isExpanded, subcategories.length]);
 
   const handleRedirect = (id) => {
     router.push(`/miscType/accessories?type=${id}`);
@@ -49,22 +48,32 @@ const AdvertisingSubcategories = () => {
       {/* HERO CARD */}
       <div
         onClick={() => setIsExpanded(!isExpanded)}
-        className="relative h-[180px] w-full cursor-pointer rounded-3xl overflow-hidden shadow-xl group transition-all duration-500 hover:scale-[1.01]"
+        className="relative h-[180px] w-full  cursor-pointer rounded-3xl overflow-hidden shadow-xl group transition-all duration-500 hover:scale-[1.01]"
       >
         <Image
           fill
-          src="https://i.ibb.co/DDdz5JsM/Advertising.jpg"
+          src="https://i.ibb.co/7thgS7dc/Gemini-Generated-Image-lwjvg8lwjvg8lwjv.png"
           alt="Advertising Equipment"
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          /* Using object-cover ensures the image fills the 180px height.
+             Reduced group-hover:scale to 105 to make it feel more "zoomed out" 
+             and less aggressive than 110.
+          */
+          className="object-cover object-center  transition-transform duration-1000 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        
+        {/* We use a slightly heavier gradient at the bottom to allow the image 
+            to breathe at the top, making it feel less "tight" or zoomed in */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+        
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 text-center px-4">
-          <span className="text-[10px] bg-[#bd8b31] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2 animate-pulse">
+          {/* <span className="text-[10px] bg-[#bd8b31] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2 animate-pulse">
             Visibility Tools
-          </span>
-          <h2 className="text-3xl font-black uppercase tracking-tighter mb-1">Advertising</h2>
-          <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all group-hover:bg-[#bd8b31] group-hover:text-white">
-            <span>{isExpanded ? "View Less" : "Explore Categories"}</span>
+          </span> */}
+          <h2 className="text-3xl font-black uppercase tracking-tighter mb-1 drop-shadow-md">
+            Advertising
+          </h2>
+          <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all group-hover:bg-[#bd8b31] group-hover:text-white animate-pulse">
+            <span>{isExpanded ? "View Less" : "View More"}</span>
             {isExpanded ? <FaChevronUp size={10} /> : <FaChevronDown size={10} />}
           </div>
         </div>
@@ -92,7 +101,7 @@ const AdvertisingSubcategories = () => {
           )}
         </div>
       )}
-    </section>
+    </section> 
   );
 };
 

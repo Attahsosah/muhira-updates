@@ -60,16 +60,16 @@ const SafetySubcategories = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 text-center px-4">
-          <span className="text-[10px] bg-[#bd8b31] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2 animate-pulse">
+          {/* <span className="text-[10px] bg-[#bd8b31] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2 animate-pulse">
             Workplace Protection
-          </span>
+          </span> */}
           
           <h2 className="text-3xl font-black uppercase tracking-tighter mb-1">
             Safety Gear
           </h2>
           
-          <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all group-hover:bg-[#bd8b31] group-hover:text-white shadow-lg">
-            <span>{isExpanded ? "View Less" : "Explore Safety"}</span>
+          <div className="flex items-center animate-pulse gap-2 bg-white text-black px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all group-hover:bg-[#bd8b31] group-hover:text-white shadow-lg">
+            <span>{isExpanded ? "View Less" : "View More"}</span>
             {isExpanded ? <FaChevronUp size={10} /> : <FaChevronDown size={10} />}
           </div>
         </div>

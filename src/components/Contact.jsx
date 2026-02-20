@@ -43,15 +43,18 @@ function Contact() {
                 <h5 className="text-[#bd8b31] text-2xl font-bold">CONTACT</h5>
             </div>
 
-            <div className="flex space-x-2 ml-10 mr-20">
+            {/* <div className="flex space-x-2 ml-10 mr-20">
                 <MdLocationPin className="text-[#00360f] h-6"/>
 
                 
                 <p className="text-[#bd8b31] text-sm ">Bujumbura, Burundi Mukaza Commune </p>
-            </div>
+            </div> */}
                         {/* <p className="text-black text-sm ml-16 ">Rohero I DRC Avenue no 6</p> */}
 
+            <div className="flex space-x-2 ml-10 mr-20">
+             <p className="text-[#bd8b31] text-sm ">Contact us on Whatsapp</p>
 
+            </div>
 
           
 
@@ -66,7 +69,7 @@ function Contact() {
             <div className="flex space-x-2 ml-10 mr-20">
                 <GiChatBubble className="text-black h-6"/>
 
-                <p className="text-[#bd8b31] text-sm ">SEND US A MESSAGE</p>
+                <p className="text-[#bd8b31] text-sm ">SEND US AN EMAIL</p>
             </div>
                 <div className="flex justify-center pb-10">
                     <div className="flex-col space-y-5">
