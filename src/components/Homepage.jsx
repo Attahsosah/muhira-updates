@@ -70,7 +70,11 @@ function Homepage() {
 
       {/* Main Content Sections */}
       <Categories />
-      <About />
+      <div className='py-10'>
+       <About />
+
+      </div>
+     
       <hr className="mt-[30px]" />
       <Contact />
       <Footer />
