@@ -62,9 +62,9 @@ function Homepage() {
       </div>
 
       {/* Newsletter Modal */}
-      {showNewsletterModal && !submitted && (
+      {/* {showNewsletterModal && !submitted && (
         <NewsletterModal />
-      )}
+      )} */}
 
       {/* ... (Admin Modal and Snackbar remain the same) */}
 
