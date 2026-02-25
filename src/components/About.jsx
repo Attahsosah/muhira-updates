@@ -32,7 +32,7 @@ function About() {
   }, [sections, setSectionData, setSectionContent]);
 
   return (
-    <div className="relative   overflow-hidden bg-[#0a0a0a] py-20 lg:px-[60px]">
+    <div className="relative overflow-hidden bg-[#0a0a0a] py-20 lg:px-[60px]">
       {/* Background Image with Parallax-like effect */}
       <div className="absolute inset-0 bg-hero-img-2 bg-fixed bg-cover opacity-30 blur-[2px]" />
       <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
@@ -55,9 +55,9 @@ function About() {
              <div className="absolute -top-20 -left-10 text-[200px] font-black text-white/5 select-none">M</div>
              <div className="border-l-2 border-[#bd8b31] pl-8 py-4">
                 <p className="text-white text-2xl font-serif italic leading-relaxed">
-                  "Excellence is not an act, but a habit."
+                  &quot;Excellence is not an act, but a habit.&quot;
                 </p>
-                <p className="text-[#bd8b31] mt-4 font-bold tracking-widest uppercase text-xs">— Muhira Updates</p>
+                <p className="text-[#bd8b31] mt-4 font-bold tracking-widest uppercase text-xs">&#8212; Muhira Updates</p>
              </div>
           </div>
 
@@ -65,7 +65,7 @@ function About() {
           <div className="lg:col-span-8 group relative" data-aos="fade-left">
             <div className="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-3xl relative overflow-hidden">
               
-              {/* Subtle texture background */}
+              {/* Subtle Edit Trigger */}
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
                  <MdEdit 
                   onClick={() => setSectionModalOpen && setSectionModalOpen(true)}
@@ -106,7 +106,7 @@ function About() {
 
           <div className="mt-16 text-center">
             <p className="text-gray-500 text-[9px] uppercase tracking-[0.5em] font-bold">
-               • Muhira Updates  
+               &bull; Muhira Updates  
             </p>
           </div>
         </div>
