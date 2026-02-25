@@ -33,7 +33,7 @@ const Categories = () => {
             <Link href="/dev">
               <div className="relative h-[180px] w-full cursor-pointer rounded-3xl overflow-hidden shadow-xl group transition-all duration-500 hover:scale-[1.01]">
                 <Image
-                  src="https://i.ibb.co/tJJGx8m/pexels-junior-teixeira-1064069-2047905.jpg"
+                  src="https://i.ibb.co/Kcdrttjs/webdev.jpg"
                   alt="Website Development"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -41,13 +41,13 @@ const Categories = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                 
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 text-center px-4">
-                   <span className="text-[10px] bg-[#bd8b31] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2">
+                   {/* <span className="text-[10px] bg-[#bd8b31] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest mb-2">
                     Digital Services
-                  </span>
+                  </span> */}
                   <h2 className="text-2xl font-black uppercase tracking-tighter mb-1">
                     Web Development
                   </h2>
-                  <div className="mt-2 text-[9px] font-black uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
+                  <div className="mt-2 bg-[#bd8b31] text-[9px] px-3 py-1 mb-2 font-black rounded-full uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
                     Build Your Vision →
                   </div>
                 </div>
