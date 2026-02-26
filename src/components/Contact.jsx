@@ -13,24 +13,21 @@ function Contact() {
     const [message, setMessage] = useState('');
     const [done, setDone] = useState(false);
 
-    // This mimics your original logic: Add to DB -> Reset Fields -> Set Done
     const sendMessage = async (e) => {
-        e.preventDefault(); // Prevents page reload
+        e.preventDefault();
         
         await addDoc(collection(db, 'gurexMessages'), {
             name, 
             email, 
             message,
-            timestamp: new Date() // Good practice for sorting later
+            timestamp: new Date()
         });
 
-        // Exact functional flow from your older version
         setName("");
         setEmail("");
         setMessage("");
         setDone(true);
         
-        // Optional: Reset 'done' after 5 seconds so they can send another later
         setTimeout(() => setDone(false), 5000);
     }
 
@@ -40,7 +37,6 @@ function Contact() {
 
     return (
         <section id="contact" className="relative min-h-screen py-12 md:py-20 bg-[#0a0a0a] flex items-center justify-center px-4 overflow-hidden">
-            {/* Background Layer */}
             <div className="absolute top-0 left-0 w-full h-full bg-hero-img-2 bg-cover bg-fixed opacity-20 -z-10 blur-sm" />
 
             <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
@@ -59,15 +55,21 @@ function Contact() {
                         </h2>
                         
                         <div className="space-y-6 md:space-y-8 mt-8 md:mt-12">
-                            <div className="flex items-start gap-4 group">
+                            {/* WHATSAPP LINK SECTION */}
+                            <a 
+                                href="https://wa.me/+25769571109?text=I%20would%20like%20to%20inquire%20about%3A" 
+                                target="_blank" 
+                                rel="noreferrer"
+                                className="flex items-start gap-4 group cursor-pointer"
+                            >
                                 <div className="p-3 bg-white/5 rounded-xl border border-white/10 text-[#bd8b31] group-hover:bg-[#bd8b31] group-hover:text-black transition-all shrink-0">
                                     <FaWhatsapp size={20} className="md:w-6 md:h-6" />
                                 </div>
                                 <div>
                                     <p className="text-gray-400 text-[10px] uppercase font-bold tracking-widest">Whatsapp</p>
-                                    <p className="text-white font-medium text-sm md:text-base">+257 69 57 11 09</p>
+                                    <p className="text-white font-medium text-sm md:text-base group-hover:text-[#bd8b31] transition-colors">+257 69 57 11 09</p>
                                 </div>
-                            </div>
+                            </a>
 
                             <div className="flex items-start gap-4 group">
                                 <div className="p-3 bg-white/5 rounded-xl border border-white/10 text-[#bd8b31] group-hover:bg-[#bd8b31] group-hover:text-black transition-all shrink-0">
@@ -143,7 +145,6 @@ function Contact() {
                             Send Message
                         </button>
 
-                        {/* The Success Message - Matches your old version's functional state */}
                         <div className={done ? "flex justify-center bg-green-600/20 border border-green-600 text-green-500 px-5 py-3 rounded-xl transition-opacity duration-500" : "hidden"}>
                              <h5 className="font-bold text-xs uppercase tracking-widest text-center">Thanks, we&apos;ll get back to you!</h5>
                         </div>
