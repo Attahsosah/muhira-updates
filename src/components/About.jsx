@@ -1,24 +1,23 @@
 import { collection, getDocs } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react'
-import { db, auth } from '../../firestore'; // Ensure auth is exported from your firestore.js
+import { db, auth } from '../../firestore'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { MdEdit } from "react-icons/md";
 import { SectionContentContext, SectionDataContext, SectionModalContext } from './context/OrderContext';
 
 function About() {
   const [sections, setSections] = useState([]);
-  const [user, setUser] = useState(null); // Track authenticated user
+  const [user, setUser] = useState(null);
   
   const { setSectionModalOpen } = useContext(SectionModalContext) || {};
   const { setSectionData } = useContext(SectionDataContext) || {};
   const { setSectionContent } = useContext(SectionContentContext) || {};
 
-  // Listen for Authentication State
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-    return () => unsubscribe(); // Cleanup listener on unmount
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -75,7 +74,6 @@ function About() {
           <div className="lg:col-span-8 group relative" data-aos="fade-left">
             <div className="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-3xl relative overflow-hidden">
               
-              {/* AUTHENTICATION CHECK: Only show Edit if user is logged in */}
               {user && (
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity z-20">
                    <MdEdit 
@@ -87,7 +85,11 @@ function About() {
 
               {sections.filter(section => section.name === "about").map((item, index) => (
                 <div key={index} className="relative">
-                  <p className="text-gray-200 font-serif text-lg md:text-xl leading-[2.2] first-letter:text-6xl first-letter:font-bold first-letter:text-[#bd8b31] first-letter:mr-3 first-letter:float-left">
+                  {/* UPDATED: Added text-justify and style for hyphens */}
+                  <p 
+                    className="text-gray-200 font-serif text-lg md:text-xl leading-[2.2] text-justify first-letter:text-6xl first-letter:font-bold first-letter:text-[#bd8b31] first-letter:mr-3 first-letter:float-left"
+                    style={{ hyphens: 'auto', WebkitHyphens: 'auto' }}
+                  >
                     {item.content}
                   </p>
                 </div>
