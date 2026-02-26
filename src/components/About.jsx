@@ -1,14 +1,25 @@
 import { collection, getDocs } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react'
-import { db } from '../../firestore';
+import { db, auth } from '../../firestore'; // Ensure auth is exported from your firestore.js
+import { onAuthStateChanged } from 'firebase/auth';
 import { MdEdit } from "react-icons/md";
 import { SectionContentContext, SectionDataContext, SectionModalContext } from './context/OrderContext';
 
 function About() {
   const [sections, setSections] = useState([]);
+  const [user, setUser] = useState(null); // Track authenticated user
+  
   const { setSectionModalOpen } = useContext(SectionModalContext) || {};
   const { setSectionData } = useContext(SectionDataContext) || {};
   const { setSectionContent } = useContext(SectionContentContext) || {};
+
+  // Listen for Authentication State
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe(); // Cleanup listener on unmount
+  }, []);
 
   useEffect(() => {
     const getSections = async () => {
@@ -33,7 +44,6 @@ function About() {
 
   return (
     <div className="relative overflow-hidden bg-[#0a0a0a] py-20 lg:px-[60px]">
-      {/* Background Image with Parallax-like effect */}
       <div className="absolute inset-0 bg-hero-img-2 bg-fixed bg-cover opacity-30 blur-[2px]" />
       <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
@@ -65,17 +75,18 @@ function About() {
           <div className="lg:col-span-8 group relative" data-aos="fade-left">
             <div className="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-3xl relative overflow-hidden">
               
-              {/* Subtle Edit Trigger */}
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
-                 <MdEdit 
-                  onClick={() => setSectionModalOpen && setSectionModalOpen(true)}
-                  className="text-white text-3xl cursor-pointer hover:scale-110 transition-transform" 
-                />
-              </div>
+              {/* AUTHENTICATION CHECK: Only show Edit if user is logged in */}
+              {user && (
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity z-20">
+                   <MdEdit 
+                    onClick={() => setSectionModalOpen && setSectionModalOpen(true)}
+                    className="text-white text-3xl cursor-pointer hover:scale-110 transition-transform p-1 bg-black/40 rounded-full" 
+                  />
+                </div>
+              )}
 
               {sections.filter(section => section.name === "about").map((item, index) => (
                 <div key={index} className="relative">
-                  {/* MODERN TYPOGRAPHY: Drop Cap effect */}
                   <p className="text-gray-200 font-serif text-lg md:text-xl leading-[2.2] first-letter:text-6xl first-letter:font-bold first-letter:text-[#bd8b31] first-letter:mr-3 first-letter:float-left">
                     {item.content}
                   </p>
