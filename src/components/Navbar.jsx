@@ -2,251 +2,144 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
-import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch, AiOutlineShoppingCart } from "react-icons/ai";
-import { BsMenuButton } from "react-icons/bs";
-import { GiCarKey } from "react-icons/gi";
-import { FaCar, FaHelmetSafety, FaHouse, FaMobile } from "react-icons/fa6";
+import {
+  AiOutlineClose,
+  AiOutlineMenu,
+} from "react-icons/ai";
+import { FaHouse, FaMobile, FaHelmetSafety } from "react-icons/fa6";
 import { LiaAirFreshenerSolid } from "react-icons/lia";
 
 import { SelectedTypeContext } from "./context/MiscContext";
 import { useRouter } from "next/router";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useI18n } from "@/i18n/I18nContext";
 
 const Navbar = ({ link }) => {
   const { data: session } = useSession();
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [selectedType, setSelectedType] = useContext(SelectedTypeContext);
 
- const [scrolled, setScrolled] = useState(false);
+  const router = useRouter();
+  const { t } = useI18n(); 
 
- const [selectedType, setSelectedType] = useContext(SelectedTypeContext);
-
-const router = useRouter();
-// Done
-
-  const handleCategoryClick = (selectedType) => {
-    // Set the category in the component state or context if needed
-    // ...
-
-    // Use the router to navigate to the corresponding page
-    router.push(`/miscType/${selectedType}`);
+  const handleCategoryClick = (type) => {
+    setOpen(false); // Close menu on click
+    router.push(`/miscType/${type}`);
   };
 
-  const showStar = () =>{
-    if(window.scrollY>60){
-        setScrolled(true)
+  const showStar = () => {
+    if (window.scrollY > 60) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
     }
-    else{
-        setScrolled(false)   
-    }
-}
+  };
 
-useEffect(() => {
-  // Redeploy
-  console.log("Session details", session?.user.name)
-},[])
-
-useEffect(function mount() {
-    function onScroll() {
-      console.log("scroll!");
-    }
-
+  useEffect(() => {
     window.addEventListener('scroll', showStar);
+    return () => window.removeEventListener("scroll", showStar);
+  }, []);
 
-    return function unMount() {
-      window.removeEventListener("scroll", showStar);
-      // shut it .
-    };
-  });
   return (
-    <div>
-
-      {/* Large screen navbar */}
-      <nav className={!scrolled ? "hidden lg:flex bg-black fixed top-0 z-[150] w-full  transition-all duration-500 ease-out":"hidden lg:flex bg-black/90 fixed top-0 z-[150] w-full transition-all duration-500 ease-out"}>
+    <div className="relative">
+      {/* --- LARGE SCREEN NAVBAR --- */}
+      <nav className={`${!scrolled ? "bg-black" : "bg-black/90"} hidden lg:flex fixed top-0 z-[150] w-full transition-all duration-500 ease-out border-b border-white/5`}>
         <div className="container mx-auto px-4 ">
           <div className="flex items-center justify-between h-16">
-          <Link href="/" className="text-[#bd8b31] font-bold text-xl cursor-pointer p-2">
+            <Link href="/" className="text-[#bd8b31] font-bold text-xl cursor-pointer p-2">
+              <div className="flex items-center space-x-[8px]">
+                <Image className="bg-white rounded-full" src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={45} width={45} alt="Logo" />
+                <p className="text-[#bd8b31] font-bold">Muhira Updates</p> 
+              </div>
+            </Link>
 
-            <div className="flex items-center space-x-[8px]">
-            <Image className="bg-white rounded-full " src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={50} width={50} />
-               <p className="text-[#bd8b31] font-bold ">Muhira Updates </p> 
-            </div>
-          </Link>
-
-
-
-          {/* Search bar */}
-            {/* <div className="flex items-center space-x-[8px]">
-              <input  placeholder="Search for anything you need" className="p-2 px-5 h-full width-6 flex-grow rounded flex-shrink rounded-l-md focus:outline-none" type="text" />
-                    <AiOutlineSearch className="h-12 p-4 text-white"/>
-            </div> */}
-            <div className="flex">
-              <Link
-                href="/"
-                className="text-gray-300 hover:bg-gray-800 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Home
+            <div className="flex items-center">
+              <Link href="/" className="text-gray-300 hover:text-[#bd8b31] px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                {t("navbar.home", "Home")}
               </Link>
-              <Link
-                href="/carsmain"
-                className="text-gray-300 hover:bg-gray-800 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Cars
+              <Link href="/carsmain" className="text-gray-300 hover:text-[#bd8b31] px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                {t("navbar.cars", "Cars")}
+              </Link>
+              <Link href="/houses" className="text-gray-300 hover:text-[#bd8b31] px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                {t("navbar.houses", "Houses")}
               </Link>
             
+              {session && (
+                <button
+                  onClick={() => signOut()}
+                  className="text-gray-300 hover:text-red-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  {t("navbar.logout", "Logout")}
+                </button>
+              )}
 
-              <Link
-                href="/houses"
-                className="text-gray-300 hover:bg-gray-800 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Houses
-              </Link>
-
-
-
-
-              {/* {
-                !session && (
-            <Link href="/api/auth/signin">
-              <p
-                className="text-gray-300 hover:bg-gray-800 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Login
-              </p>
-              </Link>
-                )
-              } */}
-              
-            
-              {
-                session && (
-            <Link href="/api/auth/signin">
-              <p
-                onClick={() => signOut()}
-                className="text-gray-300 hover:bg-gray-800 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </p>
-              </Link>
-                )
-              }
-
-
-           
-
-            {session && (
-              <Link href="/dashboard">
-                  {/* <img className="h-[32px] w-[32px] rounded-full ml-[5px]" src={session?.user.image} /> */}
-
-              </Link>
-            )}
-
-            
-            
+              <div className="ml-6 pl-6 border-l border-gray-800">
+                <LanguageSwitcher />
+              </div>
             </div>
           </div>
         </div>
       </nav>
 
-            {/* Small screen Navbar */}
-      <nav className="block lg:hidden fixed w-[100%] z-[130] top-0">
-            <div className=" flex justify-between  py-[0px] px-[5px] w-[100%] bg-black">
-              <Link href="/">
-                <Image className="bg-white rounded-full" src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={50} width={50} />
+      {/* --- SMALL SCREEN NAVBAR (Sticky Language Switcher) --- */}
+      <nav className="block lg:hidden fixed w-full z-[130] top-0 border-b border-white/10">
+        {/* Header Bar */}
+        <div className="flex justify-between items-center py-2 px-3 w-full bg-black">
+          <Link href="/" className="shrink-0">
+            <Image className="bg-white rounded-full" src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={40} width={40} alt="Logo" />
+          </Link>
 
+          <h1 className="text-[#bd8b31] font-black text-xl tracking-tighter">
+            MUHIRA <span className="text-white">UPDATES</span>
+          </h1> 
+             
+          <div className="flex items-center space-x-3">
+            {/* Language Switcher is now fixed here for easy access */}
+            <LanguageSwitcher />
+            
+            <div onClick={() => setOpen(!open)} className="text-white text-3xl cursor-pointer active:scale-90 transition-transform">
+              { open ? <AiOutlineClose /> : <AiOutlineMenu /> }
+            </div>
+          </div>
+        </div>
+            
+        {/* Mobile Menu Overlay */}
+        <div className={`${open ? "translate-x-0" : "translate-x-full"} fixed top-[56px] left-0 h-screen w-full bg-black transition-transform duration-500 ease-in-out z-[120]`}>
+          <div className="flex flex-col items-center justify-start pt-12 h-full">
+            <div className="flex flex-col space-y-10 w-full px-12">
+              
+              <Link href="/" onClick={() => setOpen(false)} className="flex items-center space-x-4 border-b border-gray-900 pb-4">
+                <FaHouse className="text-[#bd8b31] text-2xl" />
+                <p className="text-gray-100 text-lg font-bold uppercase tracking-widest">{t("navbar.home", "Home")}</p>
               </Link>
 
-
-
-              <h1 className="text-[#bd8b31] font-bold text-3xl">MUHIRA <h1 className="text-white">UPDATES</h1> </h1> 
-             
-            { !open && <AiOutlineMenu onClick={() => setOpen(!open)} className="text-gray-200 text-[50px] cursor-pointer"/>}
-              { open && <AiOutlineClose onClick={() => setOpen(!open)} className="text-gray-200 text-[50px] cursor-pointer"/>}
-            </div>
+              <Link href="/misc" onClick={() => setOpen(false)} className="flex items-center space-x-4 border-b border-gray-900 pb-4">
+                <FaMobile className="text-[#bd8b31] text-2xl" />
+                <p className="text-gray-100 text-lg font-bold uppercase tracking-widest">{t("navbar.electronics", "Electronics")}</p>
+              </Link>
             
-              <div className={open ? "h-screen w-[100%] bg-black pt-[60px] block transition-all duration-500 ease-in-out my-auto z-[50]":"hidden"}>
-                <div className="flex justify-center mt-[5vh]">
-                  <div className="block space-y-[50px]">
-                    <div onClick={() => setOpen(false)} >
-                      <Link href="/" className="flex ">
-                        <FaHouse className="text-white text-lg  " />
-                        <p className="text-gray-100 pl-[6px]">Home</p>
-
-                      </Link>
-                    </div>
-                 
-                    {/* <div onClick={() => setOpen(false)}>
-                    
-
-                      <Link href="/carsmain" className="flex ">
-                      <FaCar  className="text-gray-400 text-lg  " />
-                        <p className="text-gray-100 pl-[6px]">Vehicles</p>
-                      </Link>
-                    </div> */}
-
-                    <div className="flex">
-
-                        <Link href="/misc" className="flex ">
-
-                        <FaMobile  className="text-gray-500 text-xl active:text-yellow-500 "/>
-
-                        <p className="text-gray-100 pl-[6px]">Electronics</p>
-                        </Link>
-
-
-                    </div>
-                  
-                    <div onClick={() => handleCategoryClick("safety")} className="flex">
-                     <FaHelmetSafety className="text-yellow-500 text-lg  " />
-
-                      <p className="text-gray-100  pl-[6px]">Safety Equipment</p>
-                    </div>
-                    {/* <Link> */}
-                    <div onClick={() => handleCategoryClick("accesories")} className="flex">
-
-                    <LiaAirFreshenerSolid   className="text-green-900 text-xl  "/>
-
-                    <p className="text-gray-100 pl-[6px]">Advertising Equipment</p>
-
-                    </div>
-
-                     
-                      {/* <div className="flex ">
-                        <Link href="/houses">
-                          <FaHouse />
-
-                          <p className="text-gray-100 pl-[6px] space-y-1"> Real Estate</p>
-                      </Link>
-
-                      </div> */}
-                      {/* <div>
-
-                      
-                      <Link href="/#categories">
-
-
-                      <p className="text-gray-100">About</p>
-                    </Link>
-
-                  </div> */}
-
-                    {/* </Link> */}
-
-                  
-                    {/* <div onClick={() => setOpen(false)}>
-                      <Link href="/api/auth/signin">
-                        <p className="text-gray-100">Login</p>
-
-                      </Link>
-                    </div> */}
-
-                  </div>
-                </div>
+              <div onClick={() => handleCategoryClick("safety")} className="flex items-center space-x-4 border-b border-gray-900 pb-4 cursor-pointer">
+                <FaHelmetSafety className="text-[#bd8b31] text-2xl" />
+                <p className="text-gray-100 text-lg font-bold uppercase tracking-widest">{t("navbar.safetyEquipment", "Safety Equipment")}</p>
               </div>
 
-      </nav>
+              <div onClick={() => handleCategoryClick("accesories")} className="flex items-center space-x-4 border-b border-gray-900 pb-4 cursor-pointer">
+                <LiaAirFreshenerSolid className="text-[#bd8b31] text-2xl" />
+                <p className="text-gray-100 text-lg font-bold uppercase tracking-widest">{t("navbar.advertisingEquipment", "Advertising Equipment")}</p>
+              </div>
 
-      
+              {session && (
+                <button onClick={() => signOut()} className="text-red-500 font-bold uppercase text-left pt-10">
+                  {t("navbar.logout", "Logout")}
+                </button>
+              )}
+
+            </div>
+          </div>
+        </div>
+      </nav>
     </div>
-    
   );
 };
 

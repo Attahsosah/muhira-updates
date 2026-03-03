@@ -5,8 +5,10 @@ import { collection, getDocs, query, limit } from "firebase/firestore";
 import { db } from "../../firestore";
 import { useRouter } from "next/navigation";
 import { FiSearch, FiX } from "react-icons/fi";
+import { useI18n } from "@/i18n/I18nContext";
 
 const GlobalSearch = () => {
+  const { t } = useI18n(); 
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -111,7 +113,7 @@ const GlobalSearch = () => {
         <input
           type="text"
           className="w-full bg-white h-12 md:h-16 pl-12 md:pl-16 pr-10 md:pr-12 rounded-2xl md:rounded-3xl shadow-xl outline-none text-gray-800 text-sm md:text-lg font-semibold border-2 md:border-4 border-transparent focus:border-[#bd8b31]/20 transition-all placeholder:text-gray-400"
-          placeholder="Search items..."
+          placeholder={t("search.placeholder", "Search items...")}
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
         />
@@ -128,7 +130,9 @@ const GlobalSearch = () => {
              <div className="flex items-center gap-2">
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                 <h3 className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-gray-500">
-                  {loading ? "Searching..." : `${results.length} results`}
+                  {loading 
+                    ? t("search.searching", "Searching...") 
+                    : `${results.length} ${t("search.results", "results")}`}
                 </h3>
              </div>
           </div>
@@ -159,7 +163,9 @@ const GlobalSearch = () => {
               ))
             ) : !loading && (
               <div className="w-full py-8 text-center">
-                <p className="text-gray-900 text-sm font-bold">No items found</p>
+                <p className="text-gray-900 text-sm font-bold">
+                  {t("search.noItems", "No items found")}
+                </p>
               </div>
             )}
             
