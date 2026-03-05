@@ -23,6 +23,9 @@ export const messagesRw = {
       advertising: "Ibikoresho byo kwamamaza",
       safety: "Ibikoresho by'umutekano",
       webdev: "Gukora urubuga",
+      procurement: "Gushaka ibikoresho",
+      procurementCTA: "Reba ibindi →",  
+
       // Added keys to match your Categories.jsx component logic
       webdevCTA: "Uzuza iyerekwa ryawe →",
       viewMore: "Reba ibindi",

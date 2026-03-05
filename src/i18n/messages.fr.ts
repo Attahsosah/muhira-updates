@@ -23,10 +23,31 @@ export const messagesFr = {
       advertising: "Équipement publicitaire",
       safety: "Équipement de sécurité",
       webdev: "Développement web",
+      procurement: "Assistance à la commande",
+      procurementCTA: "Voir plus →",
       // Matches the keys in your Categories component
       webdevCTA: "Réalisez votre vision →",
       viewMore: "Voir plus",
       viewLess: "Voir moins",
+    }
+  },
+
+  procurement: {
+    heroSubtitle: "Nous optimisons votre chaîne d'approvisionnement mondiale.",
+    formTitle: "Demander une consultation",
+    steps: {
+      identifying: "Identification des besoins de votre entreprise",
+      sourcing: "Recherche de fournisseurs dans le monde entier",
+      negotiating: "Négociation des prix et des conditions",
+      placing: "Passation des commandes",
+      receiving: "Réception des marchandises",
+      payment: "Paiement et logistique",
+    },
+    fields: {
+      name: "Nom complet",
+      email: "Adresse e-mail",
+      message: "Détails de l'approvisionnement",
+      submit: "Envoyer la demande"
     }
   },
 

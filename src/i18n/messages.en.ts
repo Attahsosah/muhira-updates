@@ -23,6 +23,8 @@ export const messagesEn = {
       advertising: "Advertising Equipment",
       safety: "Safety Equipment",
       webdev: "Web Development",
+      procurement: "Procurement Assistance",
+      procurementCTA: "View  More →",
       // Added these for the CTA buttons in Categories.jsx
       webdevCTA: "Build Your Vision →",
       viewMore: "View More",
@@ -57,6 +59,27 @@ export const messagesEn = {
       cancel: "Cancel",
       save: "Save",
     },
+  },
+  // Inside messagesEn
+  procurement: {
+    title: "Procurement Assistance",
+    heroSubtitle: "We help your business source, negotiate, and deliver excellence.",
+    formTitle: "Request a Consultation",
+    steps: {
+      identifying: "Identifying company needs",
+      sourcing: "Sourcing suppliers worldwide",
+      negotiating: "Negotiating price and terms",
+      placing: "Placing orders",
+      receiving: "Receiving & Quality Check",
+      payment: "Payment & Logistics",
+    },
+    fields: {
+      name: "Contact Person",
+      email: "Email Address",
+      message: "Tell us what you need to source...",
+      submit: "Submit Request"
+    },
+    success: "Message sent successfully!"
   },
 
   // Safety Section (Nested specifically for the Safety component)
