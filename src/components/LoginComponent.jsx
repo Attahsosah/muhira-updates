@@ -23,7 +23,7 @@ export default function LoginComponent() {
       if (result?.error) {
         setError("Failed to sign in. Check your credentials.");
       } else {
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (err) {
       setError("Failed to sign in");
