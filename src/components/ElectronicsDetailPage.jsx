@@ -68,7 +68,7 @@ function DetailGallery({ product }) {
                   Buy now
                 </button>
               )}
-              {toggled && <div className="pb-4"><PayPalButton /></div>}
+              {toggled && <div className="pb-4"><PayPalButton amount={product?.price} productName={product?.title} /></div>}
             </div>
           </div>
 

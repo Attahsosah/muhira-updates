@@ -121,7 +121,7 @@ function MiscDetailPage({ product }) {
                             </div>
                         ) : (
                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <PayPalButton />
+                                <PayPalButton amount={product?.price} productName={product?.title} />
                                 <button onClick={() => setToggled(false)} className="w-full text-center text-xs mt-4 text-gray-400">Cancel</button>
                             </div>
                         )}
