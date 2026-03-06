@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useSession } from "next-auth/react";
 import { db, storage } from "../../firestore";
@@ -113,7 +113,7 @@ function MiscCreateModal({ pageCategory, onSuccess }) {
       // Ensure we save using the misspelled version for Accessories so it shows up on the page
       const dbType = miscType === "accessories" ? "accesories" : miscType;
 
-      await addDoc(collection(db, "misc"), {
+      const miscDocRef = await addDoc(collection(db, "misc"), {
         title: miscTitle,
         description: miscDescription,
         discount: miscDiscount,
@@ -127,6 +127,24 @@ function MiscCreateModal({ pageCategory, onSuccess }) {
         username: session?.user?.username || "admin",
         createdAt: new Date(),
       });
+
+      // Sync product to Paddle so it can be purchased
+      try {
+        const paddleRes = await fetch('/api/paddle/create-product', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: miscTitle, description: miscDescription, price: Number(miscPrice) }),
+        });
+
+        if (paddleRes.ok) {
+          const { paddleProductId, paddlePriceId } = await paddleRes.json();
+          await updateDoc(doc(db, "misc", miscDocRef.id), { paddleProductId, paddlePriceId });
+        } else {
+          console.error('Paddle sync failed:', await paddleRes.json());
+        }
+      } catch (paddleError) {
+        console.error('Paddle sync error:', paddleError);
+      }
 
       // Reset everything
       setmiscTitle("");

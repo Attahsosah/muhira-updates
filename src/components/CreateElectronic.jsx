@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, addDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../firestore"; // Ensure 'storage' is exported from your config
 import { 
@@ -80,14 +80,33 @@ function CreateElectronic() {
     if (!title || !price || !subcategory) return alert("Required fields missing!");
     setLoading(true);
     try {
-      await addDoc(collection(db, "electronics"), {
+      const docRef = await addDoc(collection(db, "electronics"), {
         title,
         price: Number(price),
         subcategory,
         description,
-        images: images, // The array of Firebase Storage URLs
+        images: images,
         createdAt: new Date(),
       });
+
+      // Sync product to Paddle so it can be purchased
+      try {
+        const paddleRes = await fetch('/api/paddle/create-product', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: title, description, price: Number(price) }),
+        });
+
+        if (paddleRes.ok) {
+          const { paddleProductId, paddlePriceId } = await paddleRes.json();
+          await updateDoc(doc(db, "electronics", docRef.id), { paddleProductId, paddlePriceId });
+        } else {
+          console.error('Paddle sync failed:', await paddleRes.json());
+        }
+      } catch (paddleError) {
+        console.error('Paddle sync error:', paddleError);
+      }
+
       handleClose();
     } catch (error) {
       console.error(error);
