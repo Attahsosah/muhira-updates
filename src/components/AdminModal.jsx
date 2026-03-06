@@ -50,7 +50,7 @@ function AdminModal() {
        <div className="block">
          <div className="flex justify-center">
             <div className="block">
-                <p className="text-gray-200 text-center font-serif">Welcome {session?.user.name}</p>
+                <p className="text-gray-200 text-center font-serif">Welcome {session?.user.email}</p>
                 <h5 className="font-serif font-bold  text-gray-300">You have activated admin mode!</h5>
 
             </div>

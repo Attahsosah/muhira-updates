@@ -1,17 +1,47 @@
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+
+const FIREBASE_API_KEY = "AIzaSyBuaLG3188ZJpJvV8c0UXQMwKesFxlQm8c";
 
 export const authOptions = {
-  // Configure one or more authentication providers
   providers: [
-    GoogleProvider({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "email@example.com" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        try {
+          const res = await fetch(
+            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password,
+                returnSecureToken: true,
+              }),
+            }
+          );
+          const data = await res.json();
+          if (res.ok && data.email) {
+            return {
+              id: data.localId,
+              email: data.email,
+              name: data.displayName || data.email,
+            };
+          }
+          return null;
+        } catch {
+          return null;
+        }
+      },
     }),
-    // ...add more providers here
   ],
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       session.user.username = session.user.name
         .split(" ")
         .join("_")
@@ -20,8 +50,9 @@ export const authOptions = {
       session.user.uid = token.sub;
       return session;
     },
-
-    
+  },
+  pages: {
+    signIn: "/login",
   },
 };
 
