@@ -163,7 +163,7 @@ function Page() {
                   ))}
 
                   {/* RE-INSERTED ADD CATEGORY BUTTON */}
-                  {session && (
+                  {session?.user?.isAdmin && (
                     <button
                       onClick={() => setIsCatModalOpen(true)}
                       className="flex items-center gap-2 whitespace-nowrap px-4 py-2 rounded-lg text-xs font-bold text-orange-600 bg-orange-50 border border-orange-200 mt-4 hover:bg-orange-100 transition-colors"
@@ -175,9 +175,9 @@ function Page() {
               </aside>
 
           <section className="flex-1">
-            {session && (
-              <button 
-                onClick={toggleModal} 
+            {session?.user?.isAdmin && (
+              <button
+                onClick={toggleModal}
                 className="w-full mb-8 border-2 border-dashed border-[#bd8b31]/40 text-[#bd8b31] py-4 rounded-2xl font-bold hover:bg-orange-50 transition-all flex items-center justify-center gap-2"
               >
                 <FaPlus /> Add new product

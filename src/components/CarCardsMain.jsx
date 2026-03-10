@@ -78,7 +78,7 @@ else{
     <div name="cars" className="flex justify-center">
       <div className="block lg:mx-[60px] mt-[20px]">
         <div className="flex justify-center">
-          { session && (
+          { session?.user?.isAdmin && (
             <button onClick={toggleModal} className="bg-transparent border border-[#FFA800] rounded-[1000px] text-[#FFA800] text-[14px] font-[400] px-[24px] py-[12px]  hover:bg-[#FFA800] hover:text-gray-900 transition-all duration-400 ease-out">Add a Car</button>
 
           )}

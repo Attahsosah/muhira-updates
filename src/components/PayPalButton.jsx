@@ -1,8 +1,9 @@
 import { PayPalScriptProvider, PayPalButtons, FUNDING } from "@paypal/react-paypal-js";
 import { useState } from "react";
 
-const PayPalButton = ({ amount, productName }) => {
+const PayPalButton = ({ amount, productName, productId, productType, customerEmail, customerName }) => {
   const [paid, setPaid] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
   const currency = process.env.NEXT_PUBLIC_PAYPAL_CURRENCY || "USD";
@@ -21,8 +22,35 @@ const PayPalButton = ({ amount, productName }) => {
     });
   };
 
-  const onApprove = (data, actions) => {
-    return actions.order.capture().then(() => setPaid(true));
+  const onApprove = async (data, actions) => {
+    const details = await actions.order.capture();
+    const paypalOrderId = details.id;
+
+    setSaving(true);
+    try {
+      const res = await fetch('/api/orders/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: productId || '',
+          productName,
+          productType: productType || 'electronics',
+          amount,
+          paymentMethod: 'paypal',
+          paypalOrderId,
+          customerEmail: customerEmail || details.payer?.email_address || '',
+          customerName: customerName || (details.payer?.name
+            ? `${details.payer.name.given_name} ${details.payer.name.surname}`
+            : ''),
+        }),
+      });
+      if (!res.ok) throw new Error('Order save failed');
+      setPaid(true);
+    } catch (err) {
+      setError("Payment captured but order could not be saved. Please contact support.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const onError = () => {
@@ -32,9 +60,18 @@ const PayPalButton = ({ amount, productName }) => {
   if (paid) {
     return (
       <div className="text-center py-6">
+        <div className="text-green-500 text-4xl mb-2">✓</div>
         <p className="text-green-600 font-bold text-sm">
-          Payment successful! Thank you for your purchase.
+          Payment successful! Your order is pending confirmation.
         </p>
+      </div>
+    );
+  }
+
+  if (saving) {
+    return (
+      <div className="text-center py-6">
+        <p className="text-gray-500 text-sm">Saving your order...</p>
       </div>
     );
   }
@@ -52,7 +89,6 @@ const PayPalButton = ({ amount, productName }) => {
       )}
 
       <div className="space-y-2">
-        {/* PayPal account button */}
         <PayPalButtons
           fundingSource={FUNDING.PAYPAL}
           style={{ layout: "vertical", shape: "rect", label: "pay" }}
@@ -61,7 +97,6 @@ const PayPalButton = ({ amount, productName }) => {
           onError={onError}
         />
 
-        {/* Debit / Credit card button */}
         <PayPalButtons
           fundingSource={FUNDING.CARD}
           style={{ layout: "vertical", shape: "rect" }}

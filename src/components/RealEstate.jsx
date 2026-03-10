@@ -71,7 +71,7 @@ function RealEstate() {
          <div className="block">
             <p className="text-gray-900 text-[24px] font-[700] text-center">Real Estate</p>
             <div className="block space-y-[8px]">
-      { session && (
+      { session?.user?.isAdmin && (
         <div className="flex justify-center">
             <button onClick={() => {setrealEstateOpen(true); setTask("create");}} className="bg-transparent border border-[#FFA800] rounded-[1000px] text-[#FFA800] text-[14px] font-[400] px-[24px] py-[12px]  hover:bg-[#FFA800] hover:text-gray-900 transition-all duration-400 ease-out">Add a House</button>
 

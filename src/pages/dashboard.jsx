@@ -1,39 +1,32 @@
-
-// import DashboardChart from "@/components/DashboardChart";
-// import MetricCard from "@/components/MetricCard";
-import React, { useState, useEffect } from "react";
-import { db, storage } from "../../firestore";
-import { addDoc, collection } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
+import React from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { useSession } from "next-auth/react";
 import DashboardHome from "../components/DashboardHome";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
+
 function page() {
- 
-  // const handleImageUpload = async (e) => {
-  //   const file = e.target.files[0];
-  //   const storageRef = ref(storage);
-  //   const fileRef = ref(storageRef, file.name);
-
-  //   try {
-  //     await uploadBytes(fileRef, file);
-  //     const downloadUrl = await getDownloadURL(fileRef);
-  //     setImages((prevImages) => [...prevImages, downloadUrl]);
-  //   } catch (error) {
-  //     console.error("Error uploading image:", error);
-  //   }
-  // };
-
   return (
     <div className="block">
-            <Navbar />
-     
-     <DashboardHome />
-      
+      <Navbar />
+      <DashboardHome />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session || !session.user?.isAdmin) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
 }
 
 export default page;

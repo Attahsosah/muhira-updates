@@ -112,14 +112,14 @@ function MiscProductCard({
                         {category || type}
                     </span>
                     
-                    {session && (
+                    {session?.user?.isAdmin && (
                         <div className="flex gap-3">
-                            <FiEdit 
-                                onClick={onModalOpen} 
+                            <FiEdit
+                                onClick={onModalOpen}
                                 className="text-blue-500 hover:text-blue-700 transition-colors text-lg"
                             />
-                            <MdDelete 
-                                onClick={onDeleteClick} 
+                            <MdDelete
+                                onClick={onDeleteClick}
                                 className="text-red-500 hover:text-red-700 transition-colors text-lg"
                             />
                         </div>

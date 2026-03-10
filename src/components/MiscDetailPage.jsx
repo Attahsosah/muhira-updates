@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { AiOutlineCheckCircle, AiFillHeart, AiFillStar } from 'react-icons/ai';
 import { BsWhatsapp } from "react-icons/bs";
 import PayPalButton from "./PayPalButton";
+import MobileMoneyForm from "./MobileMoneyForm";
 import Image from 'next/image';
 
 function MiscDetailPage({ product }) {
     // State for the gallery
     const [selectedImage, setSelectedImage] = useState(product?.images ? product.images[0] : "");
     const [toggled, setToggled] = useState(false);
+    const [paymentTab, setPaymentTab] = useState('paypal');
 
     // Sync selected image if product changes
     useEffect(() => {
@@ -121,7 +123,36 @@ function MiscDetailPage({ product }) {
                             </div>
                         ) : (
                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <PayPalButton amount={product?.price} productName={product?.title} />
+                                {/* Payment method tabs */}
+                                <div className="flex rounded-lg border border-gray-200 overflow-hidden mb-4">
+                                    <button
+                                        onClick={() => setPaymentTab('paypal')}
+                                        className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${paymentTab === 'paypal' ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                                    >
+                                        PayPal / Card
+                                    </button>
+                                    <button
+                                        onClick={() => setPaymentTab('mobile_money')}
+                                        className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${paymentTab === 'mobile_money' ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                                    >
+                                        Mobile Money
+                                    </button>
+                                </div>
+                                {paymentTab === 'paypal' ? (
+                                    <PayPalButton
+                                        amount={product?.price}
+                                        productName={product?.title}
+                                        productId={product?.id}
+                                        productType="misc"
+                                    />
+                                ) : (
+                                    <MobileMoneyForm
+                                        productId={product?.id}
+                                        productName={product?.title}
+                                        productType="misc"
+                                        amount={product?.price}
+                                    />
+                                )}
                                 <button onClick={() => setToggled(false)} className="w-full text-center text-xs mt-4 text-gray-400">Cancel</button>
                             </div>
                         )}

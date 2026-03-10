@@ -123,7 +123,7 @@ function MiscContent() {
                 </button>
               ))}
 
-              {session && (
+              {session?.user?.isAdmin && (
                 <button
                   onClick={() => setIsCatModalOpen(true)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-orange-600 bg-orange-50 border-2 border-dashed border-orange-200 mt-4"

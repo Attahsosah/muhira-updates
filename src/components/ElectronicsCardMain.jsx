@@ -104,7 +104,7 @@ function ElectronicsCardMain({ electronic, id }) {
           <div className="text-gray-400 text-[10px] uppercase font-bold tracking-widest">No Image</div>
         )}
         
-        {session && (
+        {session?.user?.isAdmin && (
           <div className="absolute top-2 right-2 flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
             <button onClick={handleEdit} className="p-2 md:p-3 bg-white text-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white transition-all">
               <FaEdit className="w-3 h-3 md:w-4 md:h-4" />

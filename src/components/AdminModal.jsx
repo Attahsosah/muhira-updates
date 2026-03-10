@@ -31,7 +31,7 @@ function AdminModal() {
   
 
       useEffect(() => {
-        if(session){
+        if(session?.user?.isAdmin){
             setAdminOpen(true)
         }
       },[session])

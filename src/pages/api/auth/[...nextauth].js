@@ -3,6 +3,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 const FIREBASE_API_KEY = "AIzaSyBuaLG3188ZJpJvV8c0UXQMwKesFxlQm8c";
 
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -31,6 +36,7 @@ export const authOptions = {
               id: data.localId,
               email: data.email,
               name: data.displayName || data.email,
+              isAdmin: ADMIN_EMAILS.includes(data.email.toLowerCase()),
             };
           }
           return null;
@@ -41,6 +47,12 @@ export const authOptions = {
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.isAdmin = user.isAdmin ?? false;
+      }
+      return token;
+    },
     async session({ session, token }) {
       session.user.username = session.user.name
         .split(" ")
@@ -48,6 +60,7 @@ export const authOptions = {
         .toLocaleLowerCase();
 
       session.user.uid = token.sub;
+      session.user.isAdmin = token.isAdmin ?? false;
       return session;
     },
   },

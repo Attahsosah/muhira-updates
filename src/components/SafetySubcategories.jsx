@@ -121,7 +121,7 @@ const SafetySubcategories = () => {
               <div key={subcat.id} className="relative group flex flex-col items-center">
                 
                 {/* ADMIN ACTIONS OVERLAY - Boosted z-index */}
-                {session && (
+                {session?.user?.isAdmin && (
                   <div className="absolute top-2 right-2 z-30 flex gap-1 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
                     <button 
                       onClick={(e) => openEditModal(e, subcat)}

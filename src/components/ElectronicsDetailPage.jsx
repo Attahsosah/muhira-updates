@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react';
-import { 
-  AiOutlineCheckCircle, 
-  AiOutlineClockCircle, 
-  AiFillHeart, 
-  AiFillStar 
+import {
+  AiOutlineCheckCircle,
+  AiOutlineClockCircle,
+  AiFillHeart,
+  AiFillStar
 } from 'react-icons/ai';
 import { BsWhatsapp, BsFillPinFill } from "react-icons/bs";
 import { TbManualGearbox } from "react-icons/tb";
 import OrderPlaceModal from './OrderPlaceModal';
 import PayPalButton from "./PayPalButton";
+import MobileMoneyForm from "./MobileMoneyForm";
 import RecommendedCard from "./RecommendedCard";
 
 function DetailGallery({ product }) {
   const [selectedImage, setSelectedImage] = useState(product?.images ? product.images[0] : "");
   const [open, setOpen] = useState(false);
   const [toggled, setToggled] = useState(false);
+  const [paymentTab, setPaymentTab] = useState('paypal');
 
   const handleImageClick = (image) => setSelectedImage(image);
   const handleClose = (event, reason) => {
@@ -68,7 +70,40 @@ function DetailGallery({ product }) {
                   Buy now
                 </button>
               )}
-              {toggled && <div className="pb-4"><PayPalButton amount={product?.price} productName={product?.title} /></div>}
+              {toggled && (
+                <div className="pb-4">
+                  {/* Payment method tabs */}
+                  <div className="flex rounded-lg border border-gray-200 overflow-hidden mb-3">
+                    <button
+                      onClick={() => setPaymentTab('paypal')}
+                      className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${paymentTab === 'paypal' ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                    >
+                      PayPal / Card
+                    </button>
+                    <button
+                      onClick={() => setPaymentTab('mobile_money')}
+                      className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${paymentTab === 'mobile_money' ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                    >
+                      Mobile Money
+                    </button>
+                  </div>
+                  {paymentTab === 'paypal' ? (
+                    <PayPalButton
+                      amount={product?.price}
+                      productName={product?.title}
+                      productId={product?.id}
+                      productType="electronics"
+                    />
+                  ) : (
+                    <MobileMoneyForm
+                      productId={product?.id}
+                      productName={product?.title}
+                      productType="electronics"
+                      amount={product?.price}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

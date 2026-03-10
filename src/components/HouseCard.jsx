@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { BathroomsContext, RealEstateIdContext, RealEstateImagesContext, RealEstateOpenContext, RoomsContext, TaskContext, TitleContext } from './context/RealEstateContext';
@@ -11,6 +12,7 @@ import { FaMapPin } from "react-icons/fa";
 
 function HouseCard({ realEstateTitle,realEstateDescription, realEstatePrice, realEstateLocation, images, id, realEstateBedrooms, realEstateBathrooms, house}) {
     const router = useRouter();
+    const { data: session } = useSession();
 
     
     const [realEstateImages, setrealEstateImages] = useContext(RealEstateImagesContext);
@@ -102,11 +104,12 @@ function HouseCard({ realEstateTitle,realEstateDescription, realEstatePrice, rea
 
                 {/* <p>Was <s className="text-strikethrough">{was}</s></p> */}
 
+                    {session?.user?.isAdmin && (
                     <div className="flex ml-[30px]">
                         <FiEdit onClick={onEditClick}  className="text-green-400 text-[20px] cursor-pointer"/>
                         <MdDelete onClick={onDeleteClick} className="text-red-400 text-[20px] cursor-pointer"/>
-
                     </div>
+                    )}
                    
             </div>
 

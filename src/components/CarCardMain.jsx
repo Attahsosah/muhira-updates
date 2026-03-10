@@ -130,7 +130,7 @@ function CarCardMain({type, title, image, price, fuel, mileage, transmission, id
                 </div>
 
                 <div className="flex space-x-[10px] ">
-                    { session && (
+                    { session?.user?.isAdmin && (
                   <>
                     <FiEdit onClick={() => onModalOpen()} className="text-green-400 text-[20px] cursor-pointer"/>
                     <MdDelete onClick={() => {onDeleteClick(); setDeleteType("Car"); setDeleteName("cars")}} className="text-red-400 text-[20px] cursor-pointer"/>
