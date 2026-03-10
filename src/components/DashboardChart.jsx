@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 
 const DynamicReactApexChart = dynamic(() => import('react-apexcharts'), {
-  ssr: false, // This ensures the component is only rendered on the client-side
+  ssr: false,
 });
 
 const DashboardChart = () => {
@@ -11,37 +11,81 @@ const DashboardChart = () => {
   const [chartSeries, setChartSeries] = useState(null);
 
   useEffect(() => {
-    // Define the data for the bar chart
-    const data = {
-      series: [
-        {
-          name: 'Sales',
-          data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
-        },
-      ],
-      options: {
-        chart: {
-          id: 'basic-bar',
-        },
-        xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    setChartSeries([
+      {
+        name: 'Orders',
+        data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
+      },
+    ]);
+
+    setChartOptions({
+      chart: {
+        id: 'orders-chart',
+        toolbar: { show: false },
+        sparkline: { enabled: false },
+        fontFamily: 'inherit',
+        background: 'transparent',
+      },
+      colors: ['#bd8b31'],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'light',
+          type: 'vertical',
+          shadeIntensity: 0.3,
+          opacityFrom: 0.6,
+          opacityTo: 0.05,
         },
       },
-    };
-
-    setChartOptions(data.options);
-    setChartSeries(data.series);
+      stroke: {
+        curve: 'smooth',
+        width: 2.5,
+      },
+      grid: {
+        borderColor: '#f1f5f9',
+        strokeDashArray: 4,
+        xaxis: { lines: { show: false } },
+        yaxis: { lines: { show: true } },
+        padding: { left: 0, right: 0, top: 0, bottom: 0 },
+      },
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+        labels: {
+          style: { colors: '#94a3b8', fontSize: '11px', fontWeight: 600 },
+        },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+      },
+      yaxis: {
+        labels: {
+          style: { colors: '#94a3b8', fontSize: '11px', fontWeight: 600 },
+        },
+      },
+      dataLabels: { enabled: false },
+      markers: {
+        size: 0,
+        hover: { size: 5 },
+      },
+      tooltip: {
+        theme: 'light',
+        x: { show: true },
+        y: {
+          formatter: (val) => `${val} orders`,
+        },
+        marker: { show: true },
+      },
+    });
   }, []);
 
   return (
-    <div>
+    <div className="-mx-2">
       {chartOptions && chartSeries && (
         <DynamicReactApexChart
-        className="w-[600px]"
           options={chartOptions}
           series={chartSeries}
-          type="bar"
-          height={350}
+          type="area"
+          height={260}
+          width="100%"
         />
       )}
     </div>

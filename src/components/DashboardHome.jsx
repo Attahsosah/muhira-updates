@@ -1,74 +1,289 @@
-import DashboardChart from "@/components/DashboardChart";
-import MetricCard from "@/components/MetricCard";
-import OrdersDashboard from "@/components/OrdersDashboard";
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../../firestore";
 import { collection, onSnapshot } from "firebase/firestore";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
-import { FilteredCarsContext } from "./context/CarCardContext";
+import Image from "next/image";
+import DashboardChart from "@/components/DashboardChart";
+import OrdersDashboard from "@/components/OrdersDashboard";
+import {
+  HiOutlineShoppingCart,
+  HiOutlineClock,
+  HiOutlineCheckCircle,
+  HiOutlineLogout,
+  HiOutlineChartBar,
+  HiOutlineHome,
+  HiOutlineTruck,
+  HiOutlineCollection,
+  HiOutlineMenu,
+} from "react-icons/hi";
+
+const NAV = [
+  { id: "overview", label: "Overview", icon: HiOutlineChartBar },
+  { id: "orders",   label: "Orders",   icon: HiOutlineShoppingCart },
+];
+
+const PRODUCT_LINKS = [
+  { href: "/carsmain", label: "Cars",     icon: HiOutlineTruck },
+  { href: "/houses",   label: "Houses",   icon: HiOutlineHome },
+  { href: "/misc",     label: "Products", icon: HiOutlineCollection },
+];
+
+function StatCard({ title, value, Icon, bg, text, sub }) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <div className="flex items-start justify-between mb-5">
+        <p className="text-sm font-semibold text-gray-500">{title}</p>
+        <span className={`${bg} ${text} p-2.5 rounded-xl`}>
+          <Icon className="text-[18px]" />
+        </span>
+      </div>
+      <p className="text-4xl font-black text-gray-900 tracking-tight">{value}</p>
+      <p className="text-xs text-gray-400 mt-2 font-medium">{sub}</p>
+    </div>
+  );
+}
 
 function DashboardHome() {
-  const [open, setOpen] = useState(false);
   const { data: session } = useSession();
-  const [filteredCars, setFilteredCars] = useContext(FilteredCarsContext);
-
+  const [section, setSection] = useState("overview");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [totalOrders, setTotalOrders] = useState(0);
   const [pendingOrders, setPendingOrders] = useState(0);
   const [confirmedOrders, setConfirmedOrders] = useState(0);
 
   useEffect(() => {
     if (!session?.user?.isAdmin) return;
-    const unsub = onSnapshot(collection(db, 'orders'), (snap) => {
-      const docs = snap.docs.map(d => d.data());
+    const unsub = onSnapshot(collection(db, "orders"), (snap) => {
+      const docs = snap.docs.map((d) => d.data());
       setTotalOrders(docs.length);
-      setPendingOrders(docs.filter(o => o.status === 'pending').length);
-      setConfirmedOrders(docs.filter(o => o.status === 'confirmed').length);
+      setPendingOrders(docs.filter((o) => o.status === "pending").length);
+      setConfirmedOrders(docs.filter((o) => o.status === "confirmed").length);
     });
     return () => unsub();
   }, [session]);
 
-  const toggleModal = () => {
-    setOpen(true);
-  };
+  if (!session?.user?.isAdmin) return null;
+
+  const initials = session.user.name?.[0]?.toUpperCase() || "A";
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
+  });
+
+  const stats = [
+    {
+      title: "Total Orders",
+      value: totalOrders,
+      Icon: HiOutlineShoppingCart,
+      bg: "bg-violet-50",
+      text: "text-violet-600",
+      sub: "All time",
+    },
+    {
+      title: "Pending Orders",
+      value: pendingOrders,
+      Icon: HiOutlineClock,
+      bg: "bg-amber-50",
+      text: "text-amber-600",
+      sub: "Awaiting confirmation",
+    },
+    {
+      title: "Confirmed Orders",
+      value: confirmedOrders,
+      Icon: HiOutlineCheckCircle,
+      bg: "bg-emerald-50",
+      text: "text-emerald-600",
+      sub: "Successfully completed",
+    },
+  ];
+
+  const SidebarContent = () => (
+    <>
+      {/* Logo */}
+      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/5 flex-shrink-0">
+        <Image
+          src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg"
+          height={36} width={36} alt="Logo"
+          className="rounded-full ring-2 ring-[#bd8b31]/30"
+        />
+        <div className="min-w-0">
+          <p className="text-white font-black text-sm leading-tight">Muhira Updates</p>
+          <p className="text-gray-500 text-[10px] uppercase tracking-widest">Admin Panel</p>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-3 py-5 overflow-y-auto">
+        <p className="text-gray-600 text-[9px] font-black uppercase tracking-[0.15em] px-3 mb-2">
+          Dashboard
+        </p>
+        <div className="space-y-0.5">
+          {NAV.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => { setSection(id); setSidebarOpen(false); }}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
+                section === id
+                  ? "bg-[#bd8b31] text-white shadow-lg shadow-[#bd8b31]/20"
+                  : "text-gray-400 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <Icon className="text-lg flex-shrink-0" />
+              {label}
+              {id === "orders" && pendingOrders > 0 && (
+                <span className="ml-auto bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                  {pendingOrders}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        <p className="text-gray-600 text-[9px] font-black uppercase tracking-[0.15em] px-3 mb-2 mt-6">
+          Products
+        </p>
+        <div className="space-y-0.5">
+          {PRODUCT_LINKS.map(({ href, label, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-400 hover:bg-white/5 hover:text-white transition-all duration-150"
+            >
+              <Icon className="text-lg flex-shrink-0" />
+              {label}
+            </Link>
+          ))}
+        </div>
+      </nav>
+
+      {/* User Footer */}
+      <div className="px-4 py-4 border-t border-white/5 flex-shrink-0">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="h-8 w-8 rounded-full bg-[#bd8b31] flex items-center justify-center text-white text-xs font-black flex-shrink-0">
+            {initials}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white text-xs font-bold truncate leading-tight">
+              {session.user.name || "Admin"}
+            </p>
+            <p className="text-gray-500 text-[10px] truncate">{session.user.email}</p>
+          </div>
+        </div>
+        <button
+          onClick={() => signOut({ callbackUrl: "/login" })}
+          className="w-full flex items-center gap-2 text-gray-500 hover:text-red-400 text-xs font-semibold transition-colors py-1"
+        >
+          <HiOutlineLogout className="text-sm" />
+          Sign out
+        </button>
+      </div>
+    </>
+  );
 
   return (
-    <div>
-      {session?.user?.isAdmin ? (
-        <>
-          <div className="flex justify-center">
-            <div className="flex justify-between w-full mx-[40px] mt-[90px]">
-              <MetricCard title="Total Orders" metric={String(totalOrders)} colour="red" />
-              <MetricCard title="Pending Orders" metric={String(pendingOrders)} colour="yellow" />
-              <MetricCard title="Confirmed Orders" metric={String(confirmedOrders)} colour="red" />
-            </div>
-          </div>
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+      {/* ── Desktop Sidebar ── */}
+      <aside className="hidden lg:flex w-60 xl:w-64 bg-[#0f172a] flex-col h-screen flex-shrink-0">
+        <SidebarContent />
+      </aside>
 
-          <div className="flex justify-between bg-white mt-[40px] mx-[40px]">
-            {/* Bottom Left */}
-            <DashboardChart />
-
-            {/* Bottom Right */}
-            <div className="flex space-x-[10px]">
-              <Link href="/cars">
-                <button className="h-[50px] px-[5px] py-[7px] rounded-[8px] bg-black text-white font-[400]">
-                  My Ads
-                </button>
-              </Link>
-            </div>
-
-            <div className="block w-[500px]">
-              <div className="flex justify-center">
-                <button onClick={toggleModal}>Create Ad</button>
-              </div>
-            </div>
-          </div>
-
-          <OrdersDashboard />
-        </>
-      ) : (
-        <div></div>
+      {/* ── Mobile Sidebar overlay ── */}
+      {sidebarOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 flex">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <aside className="relative w-64 bg-[#0f172a] flex flex-col h-screen z-10">
+            <SidebarContent />
+          </aside>
+        </div>
       )}
+
+      {/* ── Main Content ── */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Header */}
+        <header className="bg-white border-b border-gray-100 px-6 lg:px-8 py-4 flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center gap-4">
+            <button
+              className="lg:hidden text-gray-500 hover:text-gray-900 transition-colors"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <HiOutlineMenu className="text-xl" />
+            </button>
+            <div>
+              <h1 className="text-lg font-black text-gray-900 capitalize leading-tight">
+                {section === "overview" ? "Overview" : "Orders"}
+              </h1>
+              <p className="text-gray-400 text-[11px] font-medium hidden sm:block">{today}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:block text-right">
+              <p className="text-xs font-bold text-gray-900">{session.user.name || "Admin"}</p>
+              <p className="text-[10px] text-gray-400">{session.user.email}</p>
+            </div>
+            <div className="h-9 w-9 rounded-full bg-[#bd8b31] flex items-center justify-center text-white text-sm font-black ring-2 ring-[#bd8b31]/20">
+              {initials}
+            </div>
+          </div>
+        </header>
+
+        {/* Scrollable Body */}
+        <main className="flex-1 overflow-y-auto p-6 lg:p-8">
+          {section === "overview" && (
+            <>
+              {/* Stat Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5 mb-8">
+                {stats.map((s) => (
+                  <StatCard key={s.title} {...s} />
+                ))}
+              </div>
+
+              {/* Chart */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest">
+                    Sales Overview
+                  </h2>
+                  <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">
+                    This Year
+                  </span>
+                </div>
+                <DashboardChart />
+              </div>
+
+              {/* Recent Orders preview */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
+                  <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest">
+                    Recent Orders
+                  </h2>
+                  <button
+                    onClick={() => setSection("orders")}
+                    className="text-xs text-[#bd8b31] font-bold hover:underline"
+                  >
+                    View all →
+                  </button>
+                </div>
+                <OrdersDashboard embedded />
+              </div>
+            </>
+          )}
+
+          {section === "orders" && (
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-50">
+                <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest">
+                  All Orders
+                </h2>
+              </div>
+              <OrdersDashboard embedded />
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

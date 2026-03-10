@@ -47,7 +47,7 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
       <div className="text-center py-8 px-4">
         <div className="text-green-500 text-5xl mb-3">✓</div>
         <p className="text-green-700 font-bold text-sm">Your order is pending.</p>
-        <p className="text-gray-500 text-xs mt-1">You'll receive an email when it's confirmed.</p>
+        <p className="text-gray-500 text-xs mt-1">You&apos;ll receive an email when it&apos;s confirmed.</p>
       </div>
     );
   }

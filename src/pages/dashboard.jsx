@@ -1,17 +1,9 @@
-import React from "react";
-import Link from "next/link";
-import Navbar from "@/components/Navbar";
 import DashboardHome from "../components/DashboardHome";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 function page() {
-  return (
-    <div className="block">
-      <Navbar />
-      <DashboardHome />
-    </div>
-  );
+  return <DashboardHome />;
 }
 
 export async function getServerSideProps(context) {

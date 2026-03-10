@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { db } from 'firebase/firestore';
+import { db } from '../../firestore';
 import { addDoc, collection } from 'firebase/firestore';
 import { HiOutlineCode, HiOutlineLightningBolt, HiOutlineDeviceMobile } from 'react-icons/hi';
 
