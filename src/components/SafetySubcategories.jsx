@@ -86,7 +86,7 @@ const SafetySubcategories = () => {
       {/* HERO CARD */}
       <div
         onClick={() => setIsExpanded(!isExpanded)}
-        className="relative h-[160px] w-full cursor-pointer rounded-[2.5rem] overflow-hidden shadow-2xl group transition-all duration-500 hover:scale-[1.01] border-4 border-white"
+        className="relative h-[160px] w-full cursor-pointer rounded-[2.5rem] overflow-hidden shadow-2xl group transition-all duration-500 hover:scale-[1.01]"
       >
         <Image
           fill
