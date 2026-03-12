@@ -16,6 +16,7 @@ import CarCardAdmin from "./CarCardAdmin";
 import { FilteredCarsContext } from "./context/CarCardContext";
 // import { MiscDescriptionContext, MiscDiscountContext, MiscFeaturedContext, MiscImagesContext, MiscOfferContext, MiscOpenContext, MiscPriceContext, MiscTitleContext, MiscWasContext, TaskContext } from "./context/MiscContext";
 import { useContext, useState } from "react";
+import { useI18n } from '@/i18n/I18nContext';
 import { db, storage } from "../../firestore";
 import { BathroomsContext, PriceContext, RealEstateIdContext, RealEstateImagesContext, RealEstateOpenContext, RoomsContext, TitleContext, TypeContext, TaskContext } from "./context/RealEstateContext";
 import { DescriptionContext } from "./context/CrudContext";
@@ -23,6 +24,7 @@ import { DescriptionContext } from "./context/CrudContext";
 
 // import { db, storage } from "../../firestore";
 function RealEstateUpdateModal() {
+   const { t } = useI18n();
    const { data: session } = useSession();
 //    export const TitleContext = createContext();
 //    export const TypeContext = createContext();
@@ -115,18 +117,18 @@ const [title, setTitle] = useContext(TitleContext);
                     {/*header*/}
                     <div className="flex  justify-center p-5 border-b border-solid border-blueGray-200 rounded-t">
                       <h3 className="text-3xl font-semibold ml-[5px] text-center">
-                        Update a House 
+                        {t('realEstate.update.title', 'Update a House')}
                       </h3>
                      
                     </div>
                     {/*body*/}
                     <div className="relative p-6 block space-y-[20px]">
                         <div className="flex space-x-[8px]">
-                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder="Title" value={title} 
+                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder={t('realEstate.fields.title', 'Title')} value={title}
                             onChange={(e) => setTitle(e.target.value) }  
                         />
 
-                        <input className="rounded-[4px] border border-gray-500 text-center" placeholder="Price" value={price} 
+                        <input className="rounded-[4px] border border-gray-500 text-center" placeholder={t('realEstate.fields.price', 'Price')} value={price}
                             onChange={(e) => setPrice(e.target.value) }  
                         />
 
@@ -136,11 +138,11 @@ const [title, setTitle] = useContext(TitleContext);
                         
 
                         <div className="flex space-x-[8px] ">
-                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder="Type(Rental or For sale)" value={type} 
+                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder={t('realEstate.fields.type', 'Type (Rental or For sale)')} value={type}
                             onChange={(e) => setType(e.target.value) }  
                         />
 
-                        <input className="rounded-[4px] border border-gray-500 text-center" placeholder="Number of rooms" value={rooms} 
+                        <input className="rounded-[4px] border border-gray-500 text-center" placeholder={t('realEstate.fields.rooms', 'Number of rooms')} value={rooms}
                             onChange={(e) => setRooms(e.target.value) }  
                         />
 
@@ -149,7 +151,7 @@ const [title, setTitle] = useContext(TitleContext);
                         </div>
 
                         <div className="flex space-x-[8px] ">
-                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder="Number of bathrooms" value={bathrooms} 
+                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder={t('realEstate.fields.bathrooms', 'Number of bathrooms')} value={bathrooms}
                             onChange={(e) => setBathrooms(e.target.value) }  
                         />
 
@@ -170,7 +172,7 @@ const [title, setTitle] = useContext(TitleContext);
                        
 
                         <div className="flex justify-center">
-                            <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="shadow-lg px-10 bg-transparent md:px-10 text-gray-700 rounded-lg p-2 focus:scale-105 focus:outline-none  hover:border-coolYellow focus:border-coolYellow transform transition duration-300 ease-out" type="text" placeholder="Enter a Description here"/>
+                            <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="shadow-lg px-10 bg-transparent md:px-10 text-gray-700 rounded-lg p-2 focus:scale-105 focus:outline-none  hover:border-coolYellow focus:border-coolYellow transform transition duration-300 ease-out" type="text" placeholder={t('realEstate.fields.description', 'Enter a Description here')}/>
 
                         </div>
 
@@ -197,14 +199,14 @@ const [title, setTitle] = useContext(TitleContext);
                         type="button"
                         onClick={() => setrealEstateOpen(false)}
                       >
-                        Close
+                        {t('realEstate.actions.close', 'Close')}
                       </button>
                       <button
                         className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
                         onClick={handleSubmit}
                       >
-                        Save Changes
+                        {t('realEstate.actions.save', 'Save Changes')}
                       </button>
                     </div>
                   </div>

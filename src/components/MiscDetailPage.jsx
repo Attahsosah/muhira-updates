@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useI18n } from '@/i18n/I18nContext';
 import { AiOutlineCheckCircle, AiFillHeart, AiFillStar } from 'react-icons/ai';
 import { BsWhatsapp } from "react-icons/bs";
 import PayPalButton from "./PayPalButton";
@@ -6,6 +7,7 @@ import MobileMoneyForm from "./MobileMoneyForm";
 import Image from 'next/image';
 
 function MiscDetailPage({ product }) {
+    const { t } = useI18n();
     // State for the gallery
     const [selectedImage, setSelectedImage] = useState(product?.images ? product.images[0] : "");
     const [toggled, setToggled] = useState(false);
@@ -61,9 +63,9 @@ function MiscDetailPage({ product }) {
 
                     {/* Description Card */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                        <h3 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-4">Product Description</h3>
+                        <h3 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-4">{t('product.productDescription', 'Product Description')}</h3>
                         <p className="text-gray-600 leading-relaxed whitespace-pre-line text-lg">
-                            {product.description || "No description provided for this item."}
+                            {product.description || t('product.noProductDescription', 'No description provided for this item.')}
                         </p>
                     </div>
                 </div>
@@ -99,7 +101,7 @@ function MiscDetailPage({ product }) {
                             </div>
                             {product.discount && (
                                 <span className="text-green-600 text-xs font-bold mt-1">
-                                    You save {product.discount}%
+                                    {t('product.youSave', 'You save')} {product.discount}%
                                 </span>
                             )}
                         </div>
@@ -112,13 +114,13 @@ function MiscDetailPage({ product }) {
                                     href={`https://wa.me/+25769571109?text=Hello%20I%20would%20like%20more%20information%20about%20this%20${product.title}`}
                                     className="w-full flex items-center justify-center gap-3 bg-[#bd8b31] text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-[#a1772a] transition-all shadow-lg shadow-[#bd8b31]/20"
                                 >
-                                    Make Inquiry
+                                    {t('product.makeInquiry', 'Make Inquiry')}
                                 </a>
-                                <button 
+                                <button
                                     onClick={() => setToggled(true)}
                                     className="w-full text-gray-400 text-[10px] font-bold uppercase tracking-widest hover:text-gray-900 transition-colors"
                                 >
-                                    Show Checkout Options
+                                    {t('product.showCheckout', 'Show Checkout Options')}
                                 </button>
                             </div>
                         ) : (
@@ -129,13 +131,13 @@ function MiscDetailPage({ product }) {
                                         onClick={() => setPaymentTab('paypal')}
                                         className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${paymentTab === 'paypal' ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
                                     >
-                                        PayPal / Card
+                                        {t('product.paypal', 'PayPal / Card')}
                                     </button>
                                     <button
                                         onClick={() => setPaymentTab('mobile_money')}
                                         className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${paymentTab === 'mobile_money' ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
                                     >
-                                        Mobile Money
+                                        {t('product.mobileMoney', 'Mobile Money')}
                                     </button>
                                 </div>
                                 {paymentTab === 'paypal' ? (
@@ -153,7 +155,7 @@ function MiscDetailPage({ product }) {
                                         amount={product?.price}
                                     />
                                 )}
-                                <button onClick={() => setToggled(false)} className="w-full text-center text-xs mt-4 text-gray-400">Cancel</button>
+                                <button onClick={() => setToggled(false)} className="w-full text-center text-xs mt-4 text-gray-400">{t('product.cancel', 'Cancel')}</button>
                             </div>
                         )}
                     </div>
@@ -165,10 +167,10 @@ function MiscDetailPage({ product }) {
                                 <Image src="https://i.ibb.co/tPzgSFkJ/mu-Logo.jpg" height={48} width={48} alt="Logo" />
                             </div>
                             <div>
-                                <p className="font-black text-gray-900 uppercase text-sm">Muhira Updates Official</p>
+                                <p className="font-black text-gray-900 uppercase text-sm">{t('product.officialSeller', 'Muhira Updates Official')}</p>
                                 <div className="flex items-center gap-1 text-green-600">
                                     <AiOutlineCheckCircle />
-                                    <span className="text-[10px] font-bold uppercase">Verified Company</span>
+                                    <span className="text-[10px] font-bold uppercase">{t('product.verifiedCompany', 'Verified Company')}</span>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +185,7 @@ function MiscDetailPage({ product }) {
                             href={`https://wa.me/+25769571109?text=Hello%20I%20would%20like%20to%20chat%20about%20${product.title}`}
                             className="w-full flex items-center justify-center gap-2 bg-black text-white py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-800 transition-all"
                         >
-                            <BsWhatsapp className="text-base" /> Chat with Us
+                            <BsWhatsapp className="text-base" /> {t('product.chatWithUs', 'Chat with Us')}
                         </a>
                     </div>
                 </div>

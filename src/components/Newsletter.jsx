@@ -1,6 +1,7 @@
 "use client";
 
 import { addDoc, collection } from "firebase/firestore";
+import { useI18n } from '@/i18n/I18nContext';
 import { forwardRef, useContext, useEffect, useState } from "react";
 import { db } from "../../firestore";
 import MuiAlert from '@mui/material/Alert';
@@ -12,6 +13,7 @@ const Alert = forwardRef(function Alert(props, ref) {
 });
 
 function Newsletter() {
+    const { t } = useI18n();
     const [email, setEmail] = useState('');
     const [snackbarOpen, setSnackbarOpen] = useContext(SnackBarContext);
     const [, setOpen] = useContext(NewsletterOpenContext); // Removed unused variable
@@ -47,13 +49,13 @@ function Newsletter() {
 
                 <div className="flex justify-center">
                     <h1 className="text-yellow-600 text-[24px] lg:text-3xl font-serif font-extrabold text-center uppercase tracking-wider">
-                        Join Our Mailing List
+                        {t('newsletter.title', 'Join Our Mailing List')}
                     </h1>
                 </div>
 
                 <div className="flex justify-center">
                     <p className="text-gray-200 font-serif text-[12px] font-[400] mt-5 lg:text-sm leading-6 text-center">
-                        Sign up for our newsletter to remain up to date with the latest news on commerce in Burundi!
+                        {t('newsletter.subtitle', 'Sign up for our newsletter to remain up to date with the latest news on commerce in Burundi!')}
                     </p>
                 </div>
 
@@ -63,7 +65,7 @@ function Newsletter() {
                         onChange={(e) => setEmail(e.target.value)}
                         className="p-1 bg-transparent font-serif md:w-[300px] text-gray-100 border-b border-white focus:outline-none focus:border-coolYellow transform transition duration-300 ease-out" 
                         type="email" 
-                        placeholder="Enter your email here"
+                        placeholder={t('newsletter.emailPlaceholder', 'Enter your email here')}
                     />
                 </div>
                 
@@ -72,7 +74,7 @@ function Newsletter() {
                         onClick={addEmail} 
                         className="bg-white text-black border border-coolYellowFocus p-3 hover:bg-transparent font-serif font-extrabold hover:text-coolYellow transform transition duration-300 ease-out active:scale-90"
                     >
-                        SUBMIT
+                        {t('newsletter.submit', 'Submit')}
                     </button>
                 </div>
             </div>  

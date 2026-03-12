@@ -2,8 +2,10 @@ import React from 'react'
 import Image from "next/image";
 import { easeIn, motion } from "framer-motion";
 import { useInView } from 'react-intersection-observer';
+import { useI18n } from '@/i18n/I18nContext';
 
 function CarAccesoriesHero() {
+  const { t } = useI18n();
 
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -46,8 +48,8 @@ function CarAccesoriesHero() {
               delay:0.5
             }}
             className="relative block pt-[20px] align-middle bg-yellow-500 w-[100px] h-[100px] -bottom-[55%] -right-[70%] rounded-full">
-                <p className="text-center font-serif font-[600] ">New</p>
-                <p className="text-center font-serif font-[400]">Arrivals!</p>
+                <p className="text-center font-serif font-[600] ">{t('cars.new', 'New')}</p>
+                <p className="text-center font-serif font-[400]">{t('cars.arrivals', 'Arrivals!')}</p>
 
             </motion.div>
 
@@ -73,20 +75,20 @@ function CarAccesoriesHero() {
                   variants={variants}
                   transition={{duration:5.0 , type:"spring"}}
                 
-                className="text-[40px] text-white lg:text-[50px] capitalize font-[700]">GREAT DEALS ON</motion.p>
-              
+                className="text-[40px] text-white lg:text-[50px] capitalize font-[700]">{t('advertising.greatDeals', 'GREAT DEALS ON')}</motion.p>
+
                 <motion.p
                   ref={ref}
                   initial={{opacit:0, y:-100}}
-                  
+
                   animate={{scale:1, opacity:1,y:0,}}
-                 
-                  transition={{duration:5.0, type:"spring"}} className="text-[40px] text-yellow-500 lg:text-[50px] capitalize font-[700]">Car Accessories!
+
+                  transition={{duration:5.0, type:"spring"}} className="text-[40px] text-yellow-500 lg:text-[50px] capitalize font-[700]">{t('advertising.carAccessories', 'Car Accessories!')}
                   
                   </motion.p>
 
             </motion.div>
-            <button className="bg-green-900 h-[40px] w-[100px] text-gray-200 relative -bottom-[150px] lg:-bottom-[40%]">Shop Now</button>
+            <button className="bg-green-900 h-[40px] w-[100px] text-gray-200 relative -bottom-[150px] lg:-bottom-[40%]">{t('about.shopNow', 'Shop Now')}</button>
         </div>
     </div>
   )

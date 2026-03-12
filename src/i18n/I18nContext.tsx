@@ -13,8 +13,9 @@ import { useRouter } from 'next/router';
 import { messagesEn } from './messages.en';
 import { messagesFr } from './messages.fr';
 import { messagesRw } from './messages.rw';
+import { messagesSw } from './messages.sw';
 
-type Lang = 'en' | 'fr' | 'rw';
+type Lang = 'en' | 'fr' | 'rw' | 'sw';
 
 type I18nContextValue = {
   lang: Lang;
@@ -24,16 +25,16 @@ type I18nContextValue = {
 
 const I18nContext = createContext<I18nContextValue | undefined>(undefined);
 
-// Changed to any record to allow nested objects (categories.item)
 const MESSAGES_BY_LANG: Record<Lang, any> = {
   en: messagesEn,
   fr: messagesFr,
   rw: messagesRw,
+  sw: messagesSw,
 };
 
 const isSupportedLang = (value: string | string[] | undefined): value is Lang => {
   if (typeof value !== 'string') return false;
-  return value === 'en' || value === 'fr' || value === 'rw';
+  return value === 'en' || value === 'fr' || value === 'rw' || value === 'sw';
 };
 
 const STORAGE_KEY = 'muhira_lang';
@@ -68,7 +69,6 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
 
   const messages = useMemo(() => MESSAGES_BY_LANG[lang], [lang]);
 
-  // UPDATED: Logic to handle dot notation (e.g., "electronics.title")
   const t = useCallback(
     (key: string, fallback?: string) => {
       const keys = key.split('.');

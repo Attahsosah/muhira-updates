@@ -10,8 +10,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { AiOutlineCheckCircle, AiOutlineClockCircle, AiFillHeart, AiFillStar } from 'react-icons/ai';
 import { BsWhatsapp } from "react-icons/bs";
 import { useState } from "react";
+import { useI18n } from '@/i18n/I18nContext';
 
 function HouseDetailPage({ house }) {
+    const { t } = useI18n();
     const [selectedImage, setSelectedImage] = useState(house.images[0]);
 
     const handleImageClick = (image) => {
@@ -33,7 +35,7 @@ function HouseDetailPage({ house }) {
                    
 
                         <div className="">
-                            <p>Somewhere in Bujumbura</p>
+                            <p>{t('realEstate.somewhere', 'Somewhere in Bujumbura')}</p>
                         </div>
                     </div>
 
@@ -43,12 +45,12 @@ function HouseDetailPage({ house }) {
                 <div className="flex space-x-3">
                     <div className="flex space-x-2 items-center text-sm">
                         {/* <UploadIcon className="h-4"/> */}
-                         <p>Share</p>
+                         <p>{t('realEstate.share', 'Share')}</p>
                     </div>
 
                 <div className="flex space-x-2 items-center text-sm">
                     {/* <HeartIcon className="h-4"/> */}
-                        <p>Save</p>
+                        <p>{t('realEstate.save', 'Save')}</p>
                 </div>
 
 
@@ -148,7 +150,7 @@ function HouseDetailPage({ house }) {
                 <div className="flex-col justify-between lg:w-1/2 py-7 px-[5px] lg:px-7 shadow-lg rounded-2xl ">
                     <div className="flex justify-between ">
                         <div className="flex-col border-b">
-                            <h1 className="text-2xl font-serif">Property Details</h1>
+                            <h1 className="text-2xl font-serif">{t('realEstate.propertyDetails', 'Property Details')}</h1>
                             {/* <h1>2Bathrooms . 2 bedrooms </h1> */}
 
                         </div>
@@ -161,7 +163,7 @@ function HouseDetailPage({ house }) {
                     <div className="flex items-center space-x-3 py-4">
                         <GiHouse className="h-[40px]"/>
                         <div>
-                            <h1>Entire home</h1>
+                            <h1>{t('realEstate.entireHome', 'Entire home')}</h1>
                             <h3 className="text-gray-700 font-serif">{house.description?house.description:""}</h3>
 
                         </div>
@@ -172,7 +174,7 @@ function HouseDetailPage({ house }) {
                     <div className="flex items-center space-x-3 py-4">
                         <FaChair className="h-[40px]"/>
                         <div>
-                            <h1>Fully Furnished</h1>
+                            <h1>{t('realEstate.fullyFurnished', 'Fully Furnished')}</h1>
                             <h3 className="text-gray-700 font-serif"></h3>
 
                         </div>
@@ -182,8 +184,8 @@ function HouseDetailPage({ house }) {
                     <div className="flex items-center space-x-3 py-4">
                         <TbRulerMeasure className="h-[40px]"/>
                         <div>
-                            <h1>Spacious</h1>
-                            <h3 className="text-gray-700 font-serif">The property is surrounded by a wall and has a sizable compound</h3>
+                            <h1>{t('realEstate.spacious', 'Spacious')}</h1>
+                            <h3 className="text-gray-700 font-serif">{t('realEstate.spaciousDesc', 'The property is surrounded by a wall and has a sizable compound')}</h3>
 
                         </div>
                         
@@ -197,7 +199,7 @@ function HouseDetailPage({ house }) {
                         This  house is located in a safe neighborhood, and comes fully furnished
                     </p> */}
 
-                    <h3 className="border-b cursor-pointer font-bold pb-5">Show more</h3>
+                    <h3 className="border-b cursor-pointer font-bold pb-5">{t('realEstate.showMore', 'Show more')}</h3>
 
 
                     <div className="flex-col">
@@ -222,7 +224,7 @@ function HouseDetailPage({ house }) {
                   <p className="text-[24px] font-[500] text-gray-900">${house.Price}</p>
                   <div className="bg-gray-100 px-[2px] py-[8px]  flex items-center space-x-[4px]">
                     <AiOutlineCheckCircle className="text-green-500 text-[30px]" />
-                    <p className="text-gray-900 font-[700] text-[12px] w-[100px] text-center whitespace-nowrap">Verified Rental</p>
+                    <p className="text-gray-900 font-[700] text-[12px] w-[100px] text-center whitespace-nowrap">{t('realEstate.verifiedRental', 'Verified Rental')}</p>
                   </div>
 
                 </div>
@@ -240,7 +242,7 @@ function HouseDetailPage({ house }) {
             <div className="flex justify-center">
               <div className="block space-y-[20px]">
               <a target="_blank" href={`https://wa.me/+25769571109?text=Hello%20I%20would%20like%20more%20information%20about%20this%20${house.title}`}>
-                 <button  className="h-[40px] w-[256px] text-gray-100 mx-[16px] mt-[25px]  text-[12px]  cursor-pointer bg-black hover:bg-white hover:text-gray-900 hover:border hover:border-black transform transition-all duration-300 ease-out flex justify-center items-center align-middle">Chat with Us<BsWhatsapp className="ml-[8px] text-[12px]"/></button>
+                 <button  className="h-[40px] w-[256px] text-gray-100 mx-[16px] mt-[25px]  text-[12px]  cursor-pointer bg-black hover:bg-white hover:text-gray-900 hover:border hover:border-black transform transition-all duration-300 ease-out flex justify-center items-center align-middle">{t('product.chatWithUs', 'Chat with Us')}<BsWhatsapp className="ml-[8px] text-[12px]"/></button>
 
                 </a>
 
@@ -258,10 +260,10 @@ function HouseDetailPage({ house }) {
           {/* Top card */}
           <div className=" lg:shadow-lg  shadow-md flex justify-center  h-[150px] lg:w-[400px] pt-[20px] bg-white mx-[10px] ">
               <div className="block">
-                <p className="text-gray-700 text-[32px] whitespace-nowrap text-center">Interested in this property?</p>
+                <p className="text-gray-700 text-[32px] whitespace-nowrap text-center">{t('realEstate.interested', 'Interested in this property?')}</p>
                 <a target="_blank" href="https://wa.me/+25769571109">
                     <div className="flex justify-center">
-                        <button className="h-[40px] w-[256px] text-[#F75D34] mx-[16px] bg-white border border-[#F75D34] text-[12px] mt-[16px] cursor-pointer hover:bg-[#F75D34] hover:text-gray-100 transform transition-all duration-300 ease-out">Make an Inquiry</button>
+                        <button className="h-[40px] w-[256px] text-[#F75D34] mx-[16px] bg-white border border-[#F75D34] text-[12px] mt-[16px] cursor-pointer hover:bg-[#F75D34] hover:text-gray-100 transform transition-all duration-300 ease-out">{t('product.makeInquiry', 'Make an Inquiry')}</button>
 
                     </div>
 
@@ -278,24 +280,24 @@ function HouseDetailPage({ house }) {
                 <div className="lg:w-1/2 hidden lg:sticky">
                     <div className="shadow-lg lg:mx-9  flex-col space-y-3 rounded-2xl lg:p-8">
                         <div className="flex justify-between border-b">
-                            <h1 className="font-serif font-bold text-xl">${house.Price}/<span className="text-gray-600">month</span></h1>
+                            <h1 className="font-serif font-bold text-xl">${house.Price}/<span className="text-gray-600">{t('realEstate.month', 'month')}</span></h1>
                            
                             <div className="flex items-center space-x-2">
                                 {/* <StarIcon className="h-5 text-red-400"/> */}
-                                 <h3 className="font-serif font-bold">Available Immediately </h3>
+                                 <h3 className="font-serif font-bold">{t('realEstate.availableImmediately', 'Available Immediately')}</h3>
                             </div>
                         </div>
 
                         <div className="flex space-x-5 justify-center ml-9">
                             <div className="flex-col  px-auto justify-center rounded-2xl px-5">
-                                <h3 className="">First name</h3>
-                                <input type="text" placeholder="First Name" className=" rounded-2xl focus:outline-none"/>
+                                <h3 className="">{t('realEstate.firstName', 'First name')}</h3>
+                                <input type="text" placeholder={t('realEstate.firstName', 'First Name')} className=" rounded-2xl focus:outline-none"/>
                             </div>
 
                             <div className="flex-col px-auto justify-center rounded-2xl px-5 border-b">
                                 <div className="mx-auto">
-                                    <h3 className="">Last Name</h3>
-                                    <input type="text" placeholder="Last Name" className="rounded-2xl focus:outline-none"/>
+                                    <h3 className="">{t('realEstate.lastName', 'Last Name')}</h3>
+                                    <input type="text" placeholder={t('realEstate.lastName', 'Last Name')} className="rounded-2xl focus:outline-none"/>
                                 </div>
                                 
                             </div>
@@ -305,13 +307,13 @@ function HouseDetailPage({ house }) {
 
                         <div className="flex justify-center border-b py-2">
                             <div className="flex-col">
-                                <h3 className="font-serif font-semibold text-center">Email</h3>
-                                <input className="border rounded-2xl focus:outline-none p-2" type="email" placeholder="Email Address"/>
+                                <h3 className="font-serif font-semibold text-center">{t('mobileMoney.email', 'Email')}</h3>
+                                <input className="border rounded-2xl focus:outline-none p-2" type="email" placeholder={t('mobileMoney.emailPlaceholder', 'your@email.com')}/>
                             </div>
                         </div>
 
                         <div className="flex justify-center">
-                        <button className="rounded-lg bg-black hover:bg-white hover:text-black hover:border-2   text-white bg-red px-10 py-4 shadow-md font-bold my-3 hover:shadow-xl  transition-all duration-500 ease-out active:scale-90">Make Inquiry</button>
+                        <button className="rounded-lg bg-black hover:bg-white hover:text-black hover:border-2   text-white bg-red px-10 py-4 shadow-md font-bold my-3 hover:shadow-xl  transition-all duration-500 ease-out active:scale-90">{t('product.makeInquiry', 'Make Inquiry')}</button>
                         </div>
 
 

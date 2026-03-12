@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, forwardRef } from 'react'
+import { useI18n } from '@/i18n/I18nContext';
 import HouseCard from "./HouseCard"
 import RealEstateCreateModal from "./RealEstateCreateModal";
 import RealEstateUpdateModal from "./RealEstateUpdateModal";
@@ -16,6 +17,7 @@ const Alert = forwardRef(function Alert(props, ref) {
 
 
 function RealEstate() {
+  const { t } = useI18n();
   const { data: session } = useSession()
     const [houses, setHouses] = useState([]);
     const [housesId, setHousesId] = useState("");
@@ -64,16 +66,15 @@ function RealEstate() {
 
       <Snackbar open={done} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          Your email was succesfully sent. I will reply to you as soon as
-          possible!
+          {t('realEstate.emailSent', 'Your email was successfully sent. I will reply to you as soon as possible!')}
         </Alert>
       </Snackbar>
          <div className="block">
-            <p className="text-gray-900 text-[24px] font-[700] text-center">Real Estate</p>
+            <p className="text-gray-900 text-[24px] font-[700] text-center">{t('realEstate.title', 'Real Estate')}</p>
             <div className="block space-y-[8px]">
       { session?.user?.isAdmin && (
         <div className="flex justify-center">
-            <button onClick={() => {setrealEstateOpen(true); setTask("create");}} className="bg-transparent border border-[#FFA800] rounded-[1000px] text-[#FFA800] text-[14px] font-[400] px-[24px] py-[12px]  hover:bg-[#FFA800] hover:text-gray-900 transition-all duration-400 ease-out">Add a House</button>
+            <button onClick={() => {setrealEstateOpen(true); setTask("create");}} className="bg-transparent border border-[#FFA800] rounded-[1000px] text-[#FFA800] text-[14px] font-[400] px-[24px] py-[12px]  hover:bg-[#FFA800] hover:text-gray-900 transition-all duration-400 ease-out">{t('realEstate.addHouse', 'Add a House')}</button>
 
         </div>
 

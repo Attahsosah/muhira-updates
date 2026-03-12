@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useContext } from 'react';
+import { useI18n } from '@/i18n/I18nContext';
 import { doc, deleteDoc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 import { db, storage } from "../../firestore";
@@ -25,6 +26,7 @@ import {
 } from './context/CrudContext';
 
 function ElectronicsCardMain({ electronic, id }) {
+  const { t } = useI18n();
   const { data: session } = useSession();
 
   // Context Setters (For Admin Modal)
@@ -101,7 +103,7 @@ function ElectronicsCardMain({ electronic, id }) {
             className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="text-gray-400 text-[10px] uppercase font-bold tracking-widest">No Image</div>
+          <div className="text-gray-400 text-[10px] uppercase font-bold tracking-widest">{t('electronics.noImage', 'No Image')}</div>
         )}
         
         {session?.user?.isAdmin && (
@@ -152,7 +154,7 @@ function ElectronicsCardMain({ electronic, id }) {
           style={{ backgroundColor: '#bd8b31' }}
           className="w-full py-2 md:py-3 mt-auto text-white rounded-lg md:rounded-xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-md flex items-center justify-center"
         >
-          View Details
+          {t('electronics.viewDetails', 'View Details')}
         </Link>
       </div>
     </div>

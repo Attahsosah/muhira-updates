@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useI18n } from '@/i18n/I18nContext';
 import { db } from "../../firestore";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useSession, signOut } from "next-auth/react";
@@ -18,16 +19,6 @@ import {
   HiOutlineMenu,
 } from "react-icons/hi";
 
-const NAV = [
-  { id: "overview", label: "Overview", icon: HiOutlineChartBar },
-  { id: "orders",   label: "Orders",   icon: HiOutlineShoppingCart },
-];
-
-const PRODUCT_LINKS = [
-  { href: "/carsmain", label: "Cars",     icon: HiOutlineTruck },
-  { href: "/houses",   label: "Houses",   icon: HiOutlineHome },
-  { href: "/misc",     label: "Products", icon: HiOutlineCollection },
-];
 
 function StatCard({ title, value, Icon, bg, text, sub }) {
   return (
@@ -45,7 +36,19 @@ function StatCard({ title, value, Icon, bg, text, sub }) {
 }
 
 function DashboardHome() {
+  const { t } = useI18n();
   const { data: session } = useSession();
+
+  const NAV = [
+    { id: "overview", label: t('dashboard.overview', 'Overview'), icon: HiOutlineChartBar },
+    { id: "orders",   label: t('dashboard.orders', 'Orders'),   icon: HiOutlineShoppingCart },
+  ];
+
+  const PRODUCT_LINKS = [
+    { href: "/carsmain", label: t('navbar.cars', 'Cars'),     icon: HiOutlineTruck },
+    { href: "/houses",   label: t('navbar.houses', 'Houses'),   icon: HiOutlineHome },
+    { href: "/misc",     label: t('dashboard.products', 'Products'), icon: HiOutlineCollection },
+  ];
   const [section, setSection] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [totalOrders, setTotalOrders] = useState(0);
@@ -72,28 +75,28 @@ function DashboardHome() {
 
   const stats = [
     {
-      title: "Total Orders",
+      title: t('dashboard.totalOrders', 'Total Orders'),
       value: totalOrders,
       Icon: HiOutlineShoppingCart,
       bg: "bg-violet-50",
       text: "text-violet-600",
-      sub: "All time",
+      sub: t('dashboard.allTime', 'All time'),
     },
     {
-      title: "Pending Orders",
+      title: t('dashboard.pendingOrders', 'Pending Orders'),
       value: pendingOrders,
       Icon: HiOutlineClock,
       bg: "bg-amber-50",
       text: "text-amber-600",
-      sub: "Awaiting confirmation",
+      sub: t('dashboard.awaitingConfirmation', 'Awaiting confirmation'),
     },
     {
-      title: "Confirmed Orders",
+      title: t('dashboard.confirmedOrders', 'Confirmed Orders'),
       value: confirmedOrders,
       Icon: HiOutlineCheckCircle,
       bg: "bg-emerald-50",
       text: "text-emerald-600",
-      sub: "Successfully completed",
+      sub: t('dashboard.successfullyCompleted', 'Successfully completed'),
     },
   ];
 
@@ -108,14 +111,14 @@ function DashboardHome() {
         />
         <div className="min-w-0">
           <p className="text-white font-black text-sm leading-tight">Muhira Updates</p>
-          <p className="text-gray-500 text-[10px] uppercase tracking-widest">Admin Panel</p>
+          <p className="text-gray-500 text-[10px] uppercase tracking-widest">{t('dashboard.adminPanel', 'Admin Panel')}</p>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-5 overflow-y-auto">
         <p className="text-gray-600 text-[9px] font-black uppercase tracking-[0.15em] px-3 mb-2">
-          Dashboard
+          {t('dashboard.dashboard', 'Dashboard')}
         </p>
         <div className="space-y-0.5">
           {NAV.map(({ id, label, icon: Icon }) => (
@@ -140,7 +143,7 @@ function DashboardHome() {
         </div>
 
         <p className="text-gray-600 text-[9px] font-black uppercase tracking-[0.15em] px-3 mb-2 mt-6">
-          Products
+          {t('dashboard.products', 'Products')}
         </p>
         <div className="space-y-0.5">
           {PRODUCT_LINKS.map(({ href, label, icon: Icon }) => (
@@ -174,7 +177,7 @@ function DashboardHome() {
           className="w-full flex items-center gap-2 text-gray-500 hover:text-red-400 text-xs font-semibold transition-colors py-1"
         >
           <HiOutlineLogout className="text-sm" />
-          Sign out
+          {t('dashboard.signOut', 'Sign out')}
         </button>
       </div>
     </>
@@ -213,7 +216,7 @@ function DashboardHome() {
             </button>
             <div>
               <h1 className="text-lg font-black text-gray-900 capitalize leading-tight">
-                {section === "overview" ? "Overview" : "Orders"}
+                {section === "overview" ? t('dashboard.overview', 'Overview') : t('dashboard.orders', 'Orders')}
               </h1>
               <p className="text-gray-400 text-[11px] font-medium hidden sm:block">{today}</p>
             </div>
@@ -245,10 +248,10 @@ function DashboardHome() {
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest">
-                    Sales Overview
+                    {t('dashboard.salesOverview', 'Sales Overview')}
                   </h2>
                   <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">
-                    This Year
+                    {t('dashboard.thisYear', 'This Year')}
                   </span>
                 </div>
                 <DashboardChart />
@@ -258,13 +261,13 @@ function DashboardHome() {
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
                   <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest">
-                    Recent Orders
+                    {t('dashboard.recentOrders', 'Recent Orders')}
                   </h2>
                   <button
                     onClick={() => setSection("orders")}
                     className="text-xs text-[#bd8b31] font-bold hover:underline"
                   >
-                    View all →
+                    {t('dashboard.viewAll', 'View all')} →
                   </button>
                 </div>
                 <OrdersDashboard embedded />
@@ -276,7 +279,7 @@ function DashboardHome() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-50">
                 <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest">
-                  All Orders
+                  {t('dashboard.allOrders', 'All Orders')}
                 </h2>
               </div>
               <OrdersDashboard embedded />

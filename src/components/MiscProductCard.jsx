@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
+import { useI18n } from '@/i18n/I18nContext';
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { 
@@ -36,6 +37,7 @@ function MiscProductCard({
     subcategory // Added prop from Firestore
 }) {
     const router = useRouter();
+    const { t } = useI18n();
     const { data: session } = useSession();
     
     // Contexts for Updating
@@ -136,7 +138,7 @@ function MiscProductCard({
                     </p>
                     
                     <button className="w-full mt-3 py-2 text-[#bd8b31] border border-[#bd8b31] rounded-lg text-xs font-bold hover:bg-[#bd8b31] hover:text-white transition-all">
-                        View Details
+                        {t('misc.viewDetails', 'View Details')}
                     </button>
                 </div>
             </div>

@@ -17,8 +17,10 @@ import {
   ToastContext // Added Toast Context
 } from "./context/CrudContext";
 import { FaCloudUploadAlt, FaTrashAlt, FaPlus } from "react-icons/fa";
+import { useI18n } from '@/i18n/I18nContext';
 
 function ElectronicsUpdateModal() {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useContext(ElectronicsOpenContext);
   const [task, setTask] = useContext(TaskContext);
   const [docId] = useContext(ElectronicsIdContext);
@@ -152,7 +154,7 @@ function ElectronicsUpdateModal() {
         <div className="bg-[#bd8b31] p-6 text-white flex justify-between items-center shrink-0">
           <div>
             <h2 className="text-2xl font-bold uppercase tracking-tight">
-              {task === "update" ? "Update" : "Add"} Electronic
+              {task === "update" ? t('electronics.update.title', 'Update') : t('electronics.create.title', 'Add')} {t('electronics.electronic', 'Electronic')}
             </h2>
             <p className="text-orange-100 text-sm italic">{title || "Product Editor"}</p>
           </div>
@@ -163,7 +165,7 @@ function ElectronicsUpdateModal() {
         <div className="p-8 space-y-8 overflow-y-auto">
           {/* Image Gallery */}
           <div className="space-y-3">
-            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Image Gallery</label>
+            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('electronics.update.imageGallery', 'Image Gallery')}</label>
             <div className="flex flex-wrap gap-4">
               {images && images.map((url, index) => (
                 <div key={index} className="relative w-28 h-28 rounded-2xl overflow-hidden group border-2 border-gray-50">
@@ -178,7 +180,7 @@ function ElectronicsUpdateModal() {
                 className="w-28 h-28 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400 hover:border-[#bd8b31] hover:text-[#bd8b31] transition-all"
               >
                 <FaCloudUploadAlt size={28} />
-                <span className="text-[10px] font-bold mt-2">{uploading ? "Uploading..." : "Upload"}</span>
+                <span className="text-[10px] font-bold mt-2">{uploading ? t('electronics.update.uploading', 'Uploading...') : t('electronics.update.upload', 'Upload')}</span>
               </button>
             </div>
             <input type="file" className="hidden" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" />
@@ -187,19 +189,19 @@ function ElectronicsUpdateModal() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* General Info */}
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">General Info</label>
-              <input placeholder="Title" className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl outline-none focus:border-[#bd8b31]" value={title} onChange={(e) => setTitle(e.target.value)} />
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('electronics.update.generalInfo', 'General Info')}</label>
+              <input placeholder={t('misc.create.productTitle', 'Title')} className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl outline-none focus:border-[#bd8b31]" value={title} onChange={(e) => setTitle(e.target.value)} />
               
               <div className="grid grid-cols-2 gap-4">
-                <input type="number" placeholder="Price (BIF)" className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl outline-none focus:border-[#bd8b31]" value={price} onChange={(e) => setPrice(e.target.value)} />
+                <input type="number" placeholder={t('misc.create.price', 'Price (BIF)')} className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl outline-none focus:border-[#bd8b31]" value={price} onChange={(e) => setPrice(e.target.value)} />
                 <select className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl outline-none focus:border-[#bd8b31]" value={subcategory} onChange={(e) => setSubcategory(e.target.value)}>
-                  <option value="">Category</option>
+                  <option value="">{t('misc.create.subcategoryPlaceholder', 'Category')}</option>
                   {dbSubcategories.map(sub => <option key={sub.id} value={sub.id}>{sub.name}</option>)}
                 </select>
               </div>
 
               <textarea 
-                placeholder="Product Description..." 
+                placeholder={t('misc.create.descriptionPlaceholder', 'Product Description...')}
                 rows={5}
                 className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl outline-none focus:border-[#bd8b31] resize-none"
                 value={description}
@@ -210,9 +212,9 @@ function ElectronicsUpdateModal() {
             {/* Specifications */}
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Specifications</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('product.specifications', 'Specifications')}</label>
                 <button onClick={handleAddSpec} className="text-[#bd8b31] flex items-center gap-1 text-[10px] font-bold">
-                  <FaPlus size={10} /> Add Spec
+                  <FaPlus size={10} /> {t('electronics.update.addSpec', 'Add Spec')}
                 </button>
               </div>
               
@@ -243,13 +245,13 @@ function ElectronicsUpdateModal() {
 
         {/* Footer */}
         <div className="p-6 bg-gray-50 flex justify-end gap-4">
-          <button onClick={handleClose} className="px-8 py-3 font-bold text-gray-500">Cancel</button>
-          <button 
-            onClick={handleSave} 
+          <button onClick={handleClose} className="px-8 py-3 font-bold text-gray-500">{t('product.cancel', 'Cancel')}</button>
+          <button
+            onClick={handleSave}
             disabled={loading || uploading}
             className="bg-[#bd8b31] text-white px-12 py-3 rounded-2xl font-bold disabled:opacity-50 transition-all shadow-lg shadow-orange-100 active:scale-95"
           >
-            {loading ? "Processing..." : task === "update" ? "Update Product" : "Save Product"}
+            {loading ? t('misc.update.processing', 'Processing...') : task === "update" ? t('electronics.update.updateProduct', 'Update Product') : t('electronics.update.saveProduct', 'Save Product')}
           </button>
         </div>
       </div>

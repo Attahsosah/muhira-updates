@@ -2,8 +2,10 @@ import React from 'react'
 import Image from "next/image";
 import { easeIn, motion } from "framer-motion";
 import { FaArrowDown, FaChevronDown } from "react-icons/fa6";
+import { useI18n } from '@/i18n/I18nContext';
 
 function ElectronicsHero() {
+  const { t } = useI18n();
   return (
     <div className="h-[70vh] lg:h-[80vh]">
         <div className="absolute h-[100%] w-[100%] ">
@@ -26,8 +28,8 @@ function ElectronicsHero() {
               delay:0.5
             }}
             className="relative block pt-[20px] align-middle bg-yellow-500 w-[100px] h-[100px]  -bottom-[75%] sm:bottom-[65%] lg:-bottom-[55%] -right-[70%] rounded-full z-[15]">
-                <p className="text-center font-serif font-[600] ">New</p>
-                <p className="text-center font-serif font-[400]">Arrivals!</p>
+                <p className="text-center font-serif font-[600] ">{t('cars.new', 'New')}</p>
+                <p className="text-center font-serif font-[400]">{t('cars.arrivals', 'Arrivals!')}</p>
 
             </motion.div>
 
@@ -46,8 +48,8 @@ function ElectronicsHero() {
               duration:1.5
             }}
             className="relative -bottom-[10%] lg:-bottom-[20%] lg:-left-[30%]  z-[15]">
-                <p className="text-gray-200 text-[40px] lg:text-[50px] capitalize font-[700]">CHECK OUT OUR </p>
-                <p className="text-yellow-500 text-[40px] lg:text-[50px] capitalize font-[700] mt-[40px] lg:mt-[0px]">LATEST ARRIVALS!</p>
+                <p className="text-gray-200 text-[40px] lg:text-[50px] capitalize font-[700]">{t('electronics.checkOut', 'CHECK OUT OUR')}</p>
+                <p className="text-yellow-500 text-[40px] lg:text-[50px] capitalize font-[700] mt-[40px] lg:mt-[0px]">{t('electronics.latestArrivals', 'LATEST ARRIVALS!')}</p>
 
             </motion.div>
             <a href="#categories" className="z-[30]" >

@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useI18n } from '@/i18n/I18nContext';
 
 function MobileMoneyForm({ productId, productName, productType, amount }) {
+  const { t } = useI18n();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [transactionId, setTransactionId] = useState('');
@@ -13,7 +15,7 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !transactionId) {
-      setError('Email and transaction reference are required.');
+      setError(t('mobileMoney.validationError', 'Email and transaction reference are required.'));
       return;
     }
     setLoading(true);
@@ -36,7 +38,7 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
       if (!res.ok) throw new Error('Failed to submit order');
       setSuccess(true);
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError(t('mobileMoney.genericError', 'Something went wrong. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -46,8 +48,8 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
     return (
       <div className="text-center py-8 px-4">
         <div className="text-green-500 text-5xl mb-3">✓</div>
-        <p className="text-green-700 font-bold text-sm">Your order is pending.</p>
-        <p className="text-gray-500 text-xs mt-1">You&apos;ll receive an email when it&apos;s confirmed.</p>
+        <p className="text-green-700 font-bold text-sm">{t('mobileMoney.orderPending', 'Your order is pending.')}</p>
+        <p className="text-gray-500 text-xs mt-1">{t('mobileMoney.confirmEmail', "You'll receive an email when it's confirmed.")}</p>
       </div>
     );
   }
@@ -55,7 +57,7 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">
-        <p className="font-bold mb-1">How to pay via Mobile Money:</p>
+        <p className="font-bold mb-1">{t('mobileMoney.howToPay', 'How to pay via Mobile Money:')}</p>
         <p>
           Send <strong>BIF {Number(amount).toLocaleString()}</strong> to{' '}
           <strong>{mobileNumber}</strong>, then paste your transaction reference below.
@@ -64,26 +66,26 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
 
       <div>
         <label className="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide">
-          Name (optional)
+          {t('mobileMoney.name', 'Name (optional)')}
         </label>
         <input
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
-          placeholder="Your name"
+          placeholder={t('mobileMoney.namePlaceholder', 'Your name')}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#bd8b31]"
         />
       </div>
 
       <div>
         <label className="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide">
-          Email *
+          {t('mobileMoney.email', 'Email')} *
         </label>
         <input
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="your@email.com"
+          placeholder={t('mobileMoney.emailPlaceholder', 'your@email.com')}
           required
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#bd8b31]"
         />
@@ -91,13 +93,13 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
 
       <div>
         <label className="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide">
-          Mobile Money Reference *
+          {t('mobileMoney.reference', 'Mobile Money Reference')} *
         </label>
         <input
           type="text"
           value={transactionId}
           onChange={e => setTransactionId(e.target.value)}
-          placeholder="e.g. TX123456789"
+          placeholder={t('mobileMoney.referencePlaceholder', 'e.g. TX123456789')}
           required
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#bd8b31] font-mono"
         />
@@ -110,7 +112,7 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
         disabled={loading}
         className="w-full bg-[#bd8b31] text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#a1772a] transition-all disabled:opacity-60"
       >
-        {loading ? 'Submitting...' : 'Submit Payment Reference'}
+        {loading ? t('mobileMoney.submitting', 'Submitting...') : t('mobileMoney.submit', 'Submit Payment Reference')}
       </button>
     </form>
   );

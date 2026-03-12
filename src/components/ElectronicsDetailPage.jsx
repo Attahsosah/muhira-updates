@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useI18n } from '@/i18n/I18nContext';
 import {
   AiOutlineCheckCircle,
   AiOutlineClockCircle,
@@ -13,6 +14,7 @@ import MobileMoneyForm from "./MobileMoneyForm";
 import RecommendedCard from "./RecommendedCard";
 
 function DetailGallery({ product }) {
+  const { t } = useI18n();
   const [selectedImage, setSelectedImage] = useState(product?.images ? product.images[0] : "");
   const [open, setOpen] = useState(false);
   const [toggled, setToggled] = useState(false);
@@ -67,7 +69,7 @@ function DetailGallery({ product }) {
 
               {!toggled && (
                 <button onClick={() => setToggled(true)} className="h-[40px] w-[256px] text-[#F75D34] border border-[#F75D34] text-[12px] mb-4 hover:bg-[#F75D34] hover:text-white transition-all">
-                  Buy now
+                  {t('product.buyNow', 'Buy now')}
                 </button>
               )}
               {toggled && (
@@ -78,13 +80,13 @@ function DetailGallery({ product }) {
                       onClick={() => setPaymentTab('paypal')}
                       className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${paymentTab === 'paypal' ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
                     >
-                      PayPal / Card
+                      {t('product.paypal', 'PayPal / Card')}
                     </button>
                     <button
                       onClick={() => setPaymentTab('mobile_money')}
                       className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${paymentTab === 'mobile_money' ? 'bg-black text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
                     >
-                      Mobile Money
+                      {t('product.mobileMoney', 'Mobile Money')}
                     </button>
                   </div>
                   {paymentTab === 'paypal' ? (
@@ -110,17 +112,17 @@ function DetailGallery({ product }) {
           {/* Seller Info */}
           <div className="rounded-[4px] lg:w-[450px] block lg:shadow-lg pt-[10px] pb-[15px] px-[8px] bg-white border border-gray-100">
             <div className="text-center space-y-4">
-              <p className="text-[24px] font-[500] text-gray-900">Muhira Updates Official</p>
+              <p className="text-[24px] font-[500] text-gray-900">{t('product.officialSeller', 'Muhira Updates Official')}</p>
               <div className="bg-gray-100 px-4 py-2 inline-flex items-center space-x-2 rounded">
                 <AiOutlineCheckCircle className="text-green-500 text-[24px]" />
-                <p className="text-gray-900 font-[700] text-[12px]">Verified Company</p>
+                <p className="text-gray-900 font-[700] text-[12px]">{t('product.verifiedCompany', 'Verified Company')}</p>
               </div>
               <div className="flex justify-center space-x-1">
                 {[...Array(5)].map((_, i) => <AiFillStar key={i} className="text-yellow-500 text-[25px]" />)}
               </div>
               <a target="_blank" href={`https://wa.me/+25769571109?text=Interested in ${product?.title}`}>
                 <button className="h-[40px] w-[256px] bg-black text-white text-[12px] hover:bg-white hover:text-black border border-black transition-all flex justify-center items-center mx-auto">
-                  Chat with Us <BsWhatsapp className="ml-2"/>
+                  {t('product.chatWithUs', 'Chat with Us')} <BsWhatsapp className="ml-2"/>
                 </button>
               </a>
             </div>
@@ -131,13 +133,13 @@ function DetailGallery({ product }) {
       {/* NEW: Specs & Description */}
       <div className="max-w-6xl mx-auto px-6 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2">
-          <h3 className="text-2xl font-bold mb-4">Description</h3>
+          <h3 className="text-2xl font-bold mb-4">{t('product.description', 'Description')}</h3>
           <div className="bg-white p-8 rounded-xl border border-gray-100 text-gray-600 whitespace-pre-wrap">
-            {product?.description || "No description available."}
+            {product?.description || t('product.noDescription', 'No description available.')}
           </div>
         </div>
         <div>
-          <h3 className="text-2xl font-bold mb-4">Specifications</h3>
+          <h3 className="text-2xl font-bold mb-4">{t('product.specifications', 'Specifications')}</h3>
           <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
             {product?.specifications?.length > 0 ? (
               <table className="w-full">
@@ -150,7 +152,7 @@ function DetailGallery({ product }) {
                   ))}
                 </tbody>
               </table>
-            ) : <div className="p-10 text-center text-gray-400">No specs listed.</div>}
+            ) : <div className="p-10 text-center text-gray-400">{t('product.noSpecs', 'No specs listed.')}</div>}
           </div>
         </div>
       </div>

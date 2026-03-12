@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
+import { useI18n } from '@/i18n/I18nContext';
 import { useSession } from 'next-auth/react';
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
@@ -12,6 +13,7 @@ import { FaMapPin } from "react-icons/fa";
 
 function HouseCard({ realEstateTitle,realEstateDescription, realEstatePrice, realEstateLocation, images, id, realEstateBedrooms, realEstateBathrooms, house}) {
     const router = useRouter();
+    const { t } = useI18n();
     const { data: session } = useSession();
 
     
@@ -124,7 +126,7 @@ function HouseCard({ realEstateTitle,realEstateDescription, realEstatePrice, rea
 
                 <div className="flex space-x-[10px] items-center">
                     <FaMapPin className="text-red-500 text-[12px]"/>
-                    <p className=" text-sm text-gray-500 font-[300]">{house.location?house.location:"Send Inquiry"} | </p>
+                    <p className=" text-sm text-gray-500 font-[300]">{house.location?house.location:t('realEstate.sendInquiry', 'Send Inquiry')} | </p>
 
                 </div>
                
@@ -136,7 +138,7 @@ function HouseCard({ realEstateTitle,realEstateDescription, realEstatePrice, rea
         </div>
         <div className="flex justify-center">
                 <a href={`/houses/${id}`}>
-                    <button  className=" h-[40px] px-[5px]  text-[#00360f] bg-white border border-[#c69f41]  text-[12px] mt-[16px] cursor-pointer hover:bg-[#c69f41] active:scale-105 hover:text-gray-100 transform transition-all duration-300 ease-out">View More</button>
+                    <button  className=" h-[40px] px-[5px]  text-[#00360f] bg-white border border-[#c69f41]  text-[12px] mt-[16px] cursor-pointer hover:bg-[#c69f41] active:scale-105 hover:text-gray-100 transform transition-all duration-300 ease-out">{t('realEstate.viewMore', 'View More')}</button>
 
                 </a>
         </div>

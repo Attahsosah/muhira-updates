@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-
+import { useI18n } from '@/i18n/I18nContext';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useSession } from 'next-auth/react';
 
 function AdminModal() {
+    const { t } = useI18n();
     const { data: session } = useSession()
     const [adminOpen, setAdminOpen] = useState(false);
 
@@ -50,29 +51,29 @@ function AdminModal() {
        <div className="block">
          <div className="flex justify-center">
             <div className="block">
-                <p className="text-gray-200 text-center font-serif">Welcome {session?.user.email}</p>
-                <h5 className="font-serif font-bold  text-gray-300">You have activated admin mode!</h5>
+                <p className="text-gray-200 text-center font-serif">{t('admin.welcome', 'Welcome')} {session?.user.email}</p>
+                <h5 className="font-serif font-bold  text-gray-300">{t('admin.activatedMode', 'You have activated admin mode!')}</h5>
 
             </div>
          </div>
            <div>
-             <p className="text-thin text-sm font-serif text-gray-200">You can now edit various features of your website, such as the menu</p>
+             <p className="text-thin text-sm font-serif text-gray-200">{t('admin.editFeatures', 'You can now edit various features of your website, such as the menu')}</p>
            </div>
 
            <div className="flex items-center mt-[16px]">
-             <p className="text-thin text-sm font-serif text-gray-200">Simply scroll to a section that you would like to edit, and click the Edit button</p>
+             <p className="text-thin text-sm font-serif text-gray-200">{t('admin.scrollToEdit', 'Simply scroll to a section that you would like to edit, and click the Edit button')}</p>
              <MdEdit className="text-green-400 text-[32px]"/>
            </div>
 
 
            <div className="flex items-center mt-4">
-             <p className="text-thin text-sm font-serif text-gray-200">You can also delete some sections if you like. Simply press the delete button</p>
+             <p className="text-thin text-sm font-serif text-gray-200">{t('admin.deleteSection', 'You can also delete some sections if you like. Simply press the delete button')}</p>
              <MdDelete className="text-red-400 text-[32px]"/>
            </div>
 
 
            <div className="flex justify-center mt-4">
-             <p className="text-thin text-lg font-serif text-coolYellow">Have fun!</p>
+             <p className="text-thin text-lg font-serif text-coolYellow">{t('admin.haveFun', 'Have fun!')}</p>
            </div>
        </div>
       </Box>

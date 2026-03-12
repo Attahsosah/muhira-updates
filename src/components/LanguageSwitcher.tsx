@@ -9,6 +9,7 @@ const LANG_OPTIONS = [
   { code: 'en', label: 'EN' },
   { code: 'fr', label: 'FR' },
   { code: 'rw', label: 'RW' },
+  { code: 'sw', label: 'SW' },
 ] as const;
 
 const LanguageSwitcher: React.FC = () => {
@@ -16,7 +17,7 @@ const LanguageSwitcher: React.FC = () => {
   const router = useRouter();
   const { lang, setLang } = useI18n();
 
-  const handleChange = (code: 'en' | 'fr' | 'rw') => {
+  const handleChange = (code: 'en' | 'fr' | 'rw' | 'sw') => {
     const query = { ...router.query, lang: code };
     router.push({ pathname: router.pathname, query }, undefined, { shallow: true });
     setLang(code);

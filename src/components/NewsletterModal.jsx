@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useI18n } from '@/i18n/I18nContext';
 
 const NewsletterModal = () => {
+  const { t } = useI18n();
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -73,13 +75,13 @@ const NewsletterModal = () => {
 
         {!submitted ? (
           <>
-            <h2 className="text-2xl font-semibold mb-1">Subscribe to our Newsletter</h2>
+            <h2 className="text-2xl font-semibold mb-1">{t('newsletter.title', 'Subscribe to our Newsletter')}</h2>
             <p className="text-sm text-gray-500 mb-4">
-              Get updates straight to your inbox.
+              {t('newsletter.subtitle', 'Get updates straight to your inbox.')}
             </p>
             <input
               type="email"
-              placeholder="you@example.com"
+              placeholder={t('newsletter.emailPlaceholder', 'you@example.com')}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -88,14 +90,13 @@ const NewsletterModal = () => {
               onClick={handleSubmit}
               className="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700 transition"
             >
-              Subscribe
+              {t('newsletter.submit', 'Subscribe')}
             </button>
           </>
         ) : (
           <div className="text-center">
-            <h3 className="text-green-600 font-semibold text-lg">Thanks for subscribing!</h3>
-            {/* The apostrophe below is now escaped to fix the build error */}
-            <p className="text-sm text-gray-500">You&apos;re now on our list. 🎉</p>
+            <h3 className="text-green-600 font-semibold text-lg">{t('newsletter.thanksTitle', 'Thanks for subscribing!')}</h3>
+            <p className="text-sm text-gray-500">{t('newsletter.thanksMessage', "You're now on our list.")}</p>
           </div>
         )}
       </div>

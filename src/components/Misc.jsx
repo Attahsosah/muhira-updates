@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useI18n } from '@/i18n/I18nContext';
 import ElectronicsCardMain from './ElectronicsCardMain'
 import MiscProductCard from "./MiscProductCard";
 import MiscCreateModal from "./MiscCreateModal";
@@ -9,6 +10,7 @@ import { MiscOpenContext, TaskContext } from './context/MiscContext';
 import { useSession } from 'next-auth/react';
 import { DeleteContext } from './context/CrudContext';
 function Misc() {
+    const { t } = useI18n();
     const { data:session } = useSession();
     const [miscId, setMiscId] = useState("");
     const [miscProducts, setMiscProducts] = useState([]);
@@ -47,13 +49,13 @@ function Misc() {
     { session?.user?.isAdmin && (
           <div className="flex justify-center">
 
-            <button onClick={toggleModal} className="bg-transparent border border-[#FFA800] rounded-[1000px] text-[#FFA800] text-[14px] font-[400] px-[24px] py-[12px]  hover:bg-[#FFA800] hover:text-gray-900 transition-all duration-400 ease-out">Add a Miscellenious Item</button>
+            <button onClick={toggleModal} className="bg-transparent border border-[#FFA800] rounded-[1000px] text-[#FFA800] text-[14px] font-[400] px-[24px] py-[12px]  hover:bg-[#FFA800] hover:text-gray-900 transition-all duration-400 ease-out">{t('misc.addItem', 'Add a Miscellaneous Item')}</button>
 
           </div>
 
           )}
         <div className="flex justify-center">
-            <p className="text-gray-900 text-[24px] font-[700]">Miscellenous</p>
+            <p className="text-gray-900 text-[24px] font-[700]">{t('misc.title', 'Miscellaneous')}</p>
 
         </div>
 

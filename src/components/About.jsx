@@ -1,11 +1,13 @@
 import { collection, getDocs } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react'
+import { useI18n } from '@/i18n/I18nContext';
 import { db, auth } from '../../firestore'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { MdEdit } from "react-icons/md";
 import { SectionContentContext, SectionDataContext, SectionModalContext } from './context/OrderContext';
 
 function About() {
+  const { t } = useI18n();
   const [sections, setSections] = useState([]);
   const [user, setUser] = useState(null);
   
@@ -50,9 +52,9 @@ function About() {
         
         {/* SECTION HEADER */}
         <div className="flex flex-col items-center mb-16" data-aos="fade-up">
-          <span className="text-[#bd8b31] text-xs font-black uppercase tracking-[0.5em] mb-4">Discovery</span>
+          <span className="text-[#bd8b31] text-xs font-black uppercase tracking-[0.5em] mb-4">{t('about.discovery', 'Discovery')}</span>
           <h2 className="text-white text-5xl md:text-6xl font-black tracking-tighter uppercase">
-            Our <span className="text-[#bd8b31]">Story</span>
+            {t('about.ourStory', 'Our Story').split(' ')[0]} <span className="text-[#bd8b31]">{t('about.ourStory', 'Our Story').split(' ').slice(1).join(' ')}</span>
           </h2>
           <div className="h-[3px] w-20 bg-[#bd8b31] mt-6" />
         </div>
@@ -64,7 +66,7 @@ function About() {
              <div className="absolute -top-20 -left-10 text-[200px] font-black text-white/5 select-none">M</div>
              <div className="border-l-2 border-[#bd8b31] pl-8 py-4">
                 <p className="text-white text-2xl font-serif italic leading-relaxed">
-                  &quot;Excellence is not an act, but a habit.&quot;
+                  {t('about.quote', '"Excellence is not an act, but a habit."')}
                 </p>
                 <p className="text-[#bd8b31] mt-4 font-bold tracking-widest uppercase text-xs">&#8212; Muhira Updates</p>
              </div>
@@ -102,7 +104,7 @@ function About() {
         <div className="mt-24" data-aos="zoom-in">
           <div className="flex items-center gap-4 mb-10">
             <div className="h-[1px] flex-1 bg-white/10" />
-            <p className="text-[#bd8b31] text-[10px] font-black uppercase tracking-[0.4em]">Global Presence</p>
+            <p className="text-[#bd8b31] text-[10px] font-black uppercase tracking-[0.4em]">{t('about.globalPresence', 'Global Presence')}</p>
             <div className="h-[1px] flex-1 bg-white/10" />
           </div>
           

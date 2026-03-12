@@ -1,8 +1,9 @@
 import InfoCard from './InfoCard';
+import { useI18n } from '@/i18n/I18nContext';
 
 
 function Hero() {
-  
+  const { t } = useI18n();
 
   return (
     <div className="relative w-full mt-[] lg:mt-[50px] ">
@@ -11,12 +12,12 @@ function Hero() {
         <InfoCard />
 
         <div className="hidden  lg:block absolute top-[100px] right-0 lg:right-[290px]">
-            <p className=" text-yellow-500 font-[700] text-[50px]"> Your Supply Chain Management in one minute.
+            <p className=" text-yellow-500 font-[700] text-[50px]">{t('hero.headline', 'Your Supply Chain Management in one minute.')}
 </p>
             <div className=" absolute right-[200px] top-[200px] bg-yellow-400 h-[40px]  w-[40px] p-5 rounded-full text-gray-900">
                 NEW!
             </div>
-            <p className=" text-gray-100  text-[50px] font-[700]">IMPORT AND DOMESTIC!</p>
+            <p className=" text-gray-100  text-[50px] font-[700]">{t('hero.subheadline', 'IMPORT AND DOMESTIC!')}</p>
 
 
         </div>

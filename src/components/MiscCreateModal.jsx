@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
+import { useI18n } from '@/i18n/I18nContext';
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useSession } from "next-auth/react";
@@ -20,6 +21,7 @@ import {
 } from "./context/MiscContext";
 
 function MiscCreateModal({ pageCategory, onSuccess }) {
+  const { t } = useI18n();
   const { data: session } = useSession();
   
   // Context States
@@ -177,8 +179,8 @@ function MiscCreateModal({ pageCategory, onSuccess }) {
         {/* Header */}
         <div className="bg-[#bd8b31] p-6 text-white flex justify-between items-center">
           <div>
-            <h3 className="text-xl font-bold uppercase tracking-tight">Add New Item</h3>
-            <p className="text-[10px] font-bold uppercase opacity-80 mt-1">Target Category: {miscType}</p>
+            <h3 className="text-xl font-bold uppercase tracking-tight">{t('misc.create.title', 'Add New Item')}</h3>
+            <p className="text-[10px] font-bold uppercase opacity-80 mt-1">{t('misc.create.targetCategory', 'Target Category')}: {miscType}</p>
           </div>
           <button onClick={() => {setmiscOpen(false); setTask("");}} className="text-2xl hover:bg-white/20 w-8 h-8 flex items-center justify-center rounded-full transition-all">&times;</button>
         </div>
@@ -188,37 +190,37 @@ function MiscCreateModal({ pageCategory, onSuccess }) {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Product Title</label>
-              <input className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#bd8b31]" placeholder="e.g. Pro Helmet" value={miscTitle} onChange={(e) => setmiscTitle(e.target.value)} />
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.productTitle', 'Product Title')}</label>
+              <input className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#bd8b31]" placeholder={t('misc.create.titlePlaceholder', 'e.g. Pro Helmet')} value={miscTitle} onChange={(e) => setmiscTitle(e.target.value)} />
             </div>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Price (BIF)</label>
-              <input className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#bd8b31]" placeholder="50000" value={miscPrice} onChange={(e) => setmiscPrice(e.target.value)} />
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.price', 'Price (BIF)')}</label>
+              <input className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#bd8b31]" placeholder={t('misc.create.pricePlaceholder', '50000')} value={miscPrice} onChange={(e) => setmiscPrice(e.target.value)} />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Main Category</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.mainCategory', 'Main Category')}</label>
               <select 
                 className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none bg-gray-50 capitalize font-medium"
                 value={miscType}
                 onChange={(e) => setMiscType(e.target.value)}
               >
-                <option value="electronics">Electronics/Misc</option>
-                <option value="safety">Safety</option>
-                <option value="accesories">Advertising (Accessories)</option>
+                <option value="electronics">{t('misc.create.electronicsOption', 'Electronics/Misc')}</option>
+                <option value="safety">{t('misc.create.safetyOption', 'Safety')}</option>
+                <option value="accesories">{t('misc.create.advertisingOption', 'Advertising (Accessories)')}</option>
               </select>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Subcategory</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.subcategory', 'Subcategory')}</label>
               <select 
                 className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#bd8b31] bg-white transition-colors"
                 value={selectedSub}
                 onChange={(e) => setSelectedSub(e.target.value)}
               >
-                <option value="">Select Sub-filter...</option>
+                <option value="">{t('misc.create.subcategoryPlaceholder', 'Select Sub-filter...')}</option>
                 {subcategories.map(sub => (
                   <option key={sub.id} value={sub.id}>{sub.name}</option>
                 ))}
@@ -230,25 +232,25 @@ function MiscCreateModal({ pageCategory, onSuccess }) {
           <div className="flex flex-wrap items-center gap-6 py-2 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
             <label className="flex items-center gap-2 cursor-pointer group">
               <input type="checkbox" checked={miscOffer} onChange={(e) => setmiscOffer(e.target.checked)} className="w-5 h-5 accent-[#bd8b31]" />
-              <span className="text-xs font-bold text-gray-600 group-hover:text-black">ON OFFER</span>
+              <span className="text-xs font-bold text-gray-600 group-hover:text-black">{t('misc.create.onOffer', 'ON OFFER')}</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer group">
               <input type="checkbox" checked={miscFeatured} onChange={(e) => setmiscFeatured(e.target.checked)} className="w-5 h-5 accent-[#bd8b31]" />
-              <span className="text-xs font-bold text-gray-600 group-hover:text-black">FEATURED</span>
+              <span className="text-xs font-bold text-gray-600 group-hover:text-black">{t('misc.create.featured', 'FEATURED')}</span>
             </label>
             <div className="flex items-center gap-2 ml-auto">
-                <input className="border-2 border-gray-100 rounded-lg p-2 w-20 text-center text-xs font-bold" placeholder="-%" value={miscDiscount} onChange={(e) => setmiscDiscount(e.target.value)} />
-                <input className="border-2 border-gray-100 rounded-lg p-2 w-28 text-center text-xs font-bold" placeholder="Old Price" value={miscWas} onChange={(e) => setmiscWas(e.target.value)} />
+                <input className="border-2 border-gray-100 rounded-lg p-2 w-20 text-center text-xs font-bold" placeholder={t('misc.create.discountPlaceholder', '-%')} value={miscDiscount} onChange={(e) => setmiscDiscount(e.target.value)} />
+                <input className="border-2 border-gray-100 rounded-lg p-2 w-28 text-center text-xs font-bold" placeholder={t('misc.create.oldPrice', 'Old Price')} value={miscWas} onChange={(e) => setmiscWas(e.target.value)} />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Description</label>
-            <textarea rows={3} value={miscDescription} onChange={(e) => setmiscDescription(e.target.value)} className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#bd8b31] resize-none" placeholder="Enter item details..."/>
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.description', 'Description')}</label>
+            <textarea rows={3} value={miscDescription} onChange={(e) => setmiscDescription(e.target.value)} className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#bd8b31] resize-none" placeholder={t('misc.create.descriptionPlaceholder', 'Enter item details...')}/>
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Gallery ({miscImages?.length || 0})</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.gallery', 'Gallery')} ({miscImages?.length || 0})</label>
             <div className="flex gap-3 overflow-x-auto pb-4 items-center no-scrollbar">
               {miscImages?.map((url, i) => (
                 <div key={i} className="relative flex-shrink-0">
@@ -267,9 +269,9 @@ function MiscCreateModal({ pageCategory, onSuccess }) {
 
         {/* Footer */}
         <div className="p-6 border-t bg-gray-50 flex gap-3">
-          <button onClick={() => {setmiscOpen(false); setTask("");}} className="flex-1 py-3 text-gray-500 font-bold text-xs uppercase tracking-widest hover:bg-gray-200 rounded-xl transition-all">Discard</button>
+          <button onClick={() => {setmiscOpen(false); setTask("");}} className="flex-1 py-3 text-gray-500 font-bold text-xs uppercase tracking-widest hover:bg-gray-200 rounded-xl transition-all">{t('misc.create.discard', 'Discard')}</button>
           <button onClick={handleSubmit} disabled={uploading || imgLoading} className="flex-[2] py-3 bg-[#bd8b31] text-white font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg disabled:opacity-50 hover:bg-[#a67a2a] transition-all">
-            {uploading ? "Creating..." : "Create Product"}
+            {uploading ? t('misc.create.creating', 'Creating...') : t('misc.create.createProduct', 'Create Product')}
           </button>
         </div>
       </div>

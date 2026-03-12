@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useI18n } from '@/i18n/I18nContext';
 import { MakeContext, MileageContext, ModalImagesContext, ModelContext, OpenContext, PriceContext, TransmissionContext, TypeContext, YearContext } from "./context/CrudContext";
 import { addDoc, collection, getDocs, query, serverTimestamp, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -8,6 +9,7 @@ import { FetchedCarsContext, ModalIdContext } from "@/components/context/CarCard
 import { useSession } from "next-auth/react";
 import { db, storage } from "../../firestore";
 function AddCarModalNew() {
+    const { t } = useI18n();
     const [open, setOpen] = useContext(OpenContext);
     const [modalModel, setModalModel] = useContext(ModelContext);
     const [make, setMake] = useState("");
@@ -145,41 +147,41 @@ function AddCarModalNew() {
                     {/*header*/}
                     <div className="flex justify-center p-5 border-b border-solid border-blueGray-200 rounded-t">
                       <h3 className="text-3xl font-semibold ml-[5px]">
-                        Add a Car
+                        {t('cars.addCar', 'Add a Car')}
                       </h3>
                     
                     </div>
                     {/*body*/}
                     <div className="relative p-6 block space-y-[20px]">
                         <div className="flex space-x-[4px]">
-                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder="Make"  value={make}
+                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder={t('cars.fields.make', 'Make')}  value={make}
                         onChange={(e) => setMake(e.target.value) }/>
-                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder="Model"  value={model}
+                            <input className="rounded-[4px] border border-gray-500 text-center" placeholder={t('cars.fields.model', 'Model')}  value={model}
                         onChange={(e) => setModel(e.target.value) }/>
 
                         </div>
 
                         <div className="flex space-x-[4px]">
-                            <input className="rounded-[4px] border border-gray-500 text-center" value={mileage} placeholder="mileage" onChange={(e) => setMileage(e.target.value)} />
-                            <input className="rounded-[4px] border border-gray-500 text-center" value={year} placeholder="year" onChange={(e) => setYear(e.target.value)} />
+                            <input className="rounded-[4px] border border-gray-500 text-center" value={mileage} placeholder={t('cars.fields.mileage', 'Mileage')} onChange={(e) => setMileage(e.target.value)} />
+                            <input className="rounded-[4px] border border-gray-500 text-center" value={year} placeholder={t('cars.fields.year', 'Year')} onChange={(e) => setYear(e.target.value)} />
 
                         </div>
 
                         <div className="flex space-x-[4px]">
-                            <input className="rounded-[4px] border border-gray-500 text-center" value={transmission} placeholder="transmission" onChange={(e) => setTransmission(e.target.value)} />
-                            <input  className="rounded-[4px] border border-gray-500 text-center" value={price} onChange={(e) => setPrice(e.target.value) } placeholder="Price"/>
+                            <input className="rounded-[4px] border border-gray-500 text-center" value={transmission} placeholder={t('cars.fields.transmission', 'Transmission')} onChange={(e) => setTransmission(e.target.value)} />
+                            <input  className="rounded-[4px] border border-gray-500 text-center" value={price} onChange={(e) => setPrice(e.target.value) } placeholder={t('cars.fields.price', 'Price')}/>
 
                         </div>
 
                         <div className="flex space-x-[4px]">
-                            <input className="rounded-[4px] border border-gray-500 text-center" value={type} placeholder="Fuel Type" onChange={(e) => setType(e.target.value)} />
-                            <input  className="rounded-[4px] border border-gray-500 text-center" value={color} onChange={(e) => setColor(e.target.value) } placeholder="Colour"/>
+                            <input className="rounded-[4px] border border-gray-500 text-center" value={type} placeholder={t('cars.fields.fuelType', 'Fuel Type')} onChange={(e) => setType(e.target.value)} />
+                            <input  className="rounded-[4px] border border-gray-500 text-center" value={color} onChange={(e) => setColor(e.target.value) } placeholder={t('cars.fields.colour', 'Colour')}/>
 
                         </div>
                         
 
                         <div className="flex justify-center">
-                            <textarea className="shadow-lg px-10 bg-transparent md:px-10 text-gray-200 rounded-lg p-2 focus:scale-105 focus:outline-none  hover:border-coolYellow focus:border-coolYellow transform transition duration-300 ease-out" type="text" placeholder="Enter a Description here"/>
+                            <textarea className="shadow-lg px-10 bg-transparent md:px-10 text-gray-200 rounded-lg p-2 focus:scale-105 focus:outline-none  hover:border-coolYellow focus:border-coolYellow transform transition duration-300 ease-out" type="text" placeholder={t('cars.fields.description', 'Enter a Description here')}/>
 
                         </div>
 
@@ -207,14 +209,14 @@ function AddCarModalNew() {
                         className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
                       >
-                        Close
+                        {t('cars.actions.close', 'Close')}
                       </button>
                       <button
                   className={fileUploadClicked ? "bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 ":"bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"}
                   type="button"
                   onClick={handleSubmit}
                 >
-                    {fileUploadClicked&&!uploaded ? "Uploading....":"Save Changes"}
+                    {fileUploadClicked&&!uploaded ? t('cars.actions.uploading', 'Uploading...') : t('cars.actions.save', 'Save Changes')}
                 </button>
                       </>): (
                         <>
@@ -223,7 +225,7 @@ function AddCarModalNew() {
                         type="button"
                         onClick={() => setOpen(false)}
                       >
-                        Close
+                        {t('cars.actions.close', 'Close')}
                       </button>
 
                       {
@@ -233,7 +235,7 @@ function AddCarModalNew() {
                   type="button"
                   onClick={handleSubmit}
                 >
-                    {fileUploadClicked&&!uploaded ? "Uploading....":"Save Changes"}
+                    {fileUploadClicked&&!uploaded ? t('cars.actions.uploading', 'Uploading...') : t('cars.actions.save', 'Save Changes')}
                 </button>
                         )
                       }

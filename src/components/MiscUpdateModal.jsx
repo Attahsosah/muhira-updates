@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
+import { useI18n } from '@/i18n/I18nContext';
 import { doc, updateDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useSession } from "next-auth/react";
@@ -22,6 +23,7 @@ import {
 } from "./context/MiscContext";
 
 function MiscUpdateModal({ pageCategory, onSuccess }) {
+  const { t } = useI18n();
   const { data: session } = useSession();
   
   // Context States
@@ -168,7 +170,7 @@ function MiscUpdateModal({ pageCategory, onSuccess }) {
         {/* Header */}
         <div className="bg-[#10b981] p-6 text-white flex justify-between items-center">
           <div>
-            <h3 className="text-xl font-bold uppercase tracking-tight">Update {miscTitle || 'Item'}</h3>
+            <h3 className="text-xl font-bold uppercase tracking-tight">{t('misc.update.title', 'Update')} {miscTitle || 'Item'}</h3>
             <p className="text-[10px] opacity-70 font-mono mt-1">ID: {miscId}</p>
           </div>
           <button 
@@ -182,37 +184,37 @@ function MiscUpdateModal({ pageCategory, onSuccess }) {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Product Title</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.productTitle', 'Product Title')}</label>
               <input className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#10b981] transition-colors" value={miscTitle} onChange={(e) => setmiscTitle(e.target.value)} />
             </div>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Price (BIF)</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.price', 'Price (BIF)')}</label>
               <input className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#10b981] transition-colors" value={miscPrice} onChange={(e) => setmiscPrice(e.target.value)} />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Main Category</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.mainCategory', 'Main Category')}</label>
               <select 
                 className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none bg-gray-50 capitalize font-medium"
                 value={miscType}
                 onChange={(e) => setMiscType(e.target.value)}
               >
-                <option value="electronics">Electronics/Misc</option>
-                <option value="safety">Safety</option>
-                <option value="accesories">Advertising </option>
+                <option value="electronics">{t('misc.create.electronicsOption', 'Electronics/Misc')}</option>
+                <option value="safety">{t('misc.create.safetyOption', 'Safety')}</option>
+                <option value="accesories">{t('misc.create.advertisingOption', 'Advertising (Accessories)')}</option>
               </select>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Subcategory</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.subcategory', 'Subcategory')}</label>
               <select 
                 className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#10b981] bg-white transition-colors"
                 value={selectedSub}
                 onChange={(e) => setSelectedSub(e.target.value)}
               >
-                <option value="">Select Subcategory</option>
+                <option value="">{t('misc.update.subcategoryPlaceholder', 'Select Subcategory')}</option>
                 {subcategories.map(sub => (
                   <option key={sub.id} value={sub.id}>{sub.name}</option>
                 ))}
@@ -223,25 +225,25 @@ function MiscUpdateModal({ pageCategory, onSuccess }) {
           <div className="flex flex-wrap items-center gap-6 py-2 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
             <label className="flex items-center gap-2 cursor-pointer group">
               <input type="checkbox" checked={miscOffer} onChange={(e) => setmiscOffer(e.target.checked)} className="w-5 h-5 accent-[#10b981]" />
-              <span className="text-xs font-bold text-gray-600 group-hover:text-[#10b981] transition-colors">ON OFFER</span>
+              <span className="text-xs font-bold text-gray-600 group-hover:text-[#10b981] transition-colors">{t('misc.create.onOffer', 'ON OFFER')}</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer group">
               <input type="checkbox" checked={miscFeatured} onChange={(e) => setmiscFeatured(e.target.checked)} className="w-5 h-5 accent-[#10b981]" />
-              <span className="text-xs font-bold text-gray-600 group-hover:text-[#10b981] transition-colors">FEATURED</span>
+              <span className="text-xs font-bold text-gray-600 group-hover:text-[#10b981] transition-colors">{t('misc.create.featured', 'FEATURED')}</span>
             </label>
             <div className="flex items-center gap-2 ml-auto">
-                <input className="border-2 border-gray-100 rounded-lg p-2 w-20 text-center text-xs font-bold" placeholder="-%" value={miscDiscount} onChange={(e) => setmiscDiscount(e.target.value)} />
-                <input className="border-2 border-gray-100 rounded-lg p-2 w-28 text-center text-xs font-bold" placeholder="Old Price" value={miscWas} onChange={(e) => setmiscWas(e.target.value)} />
+                <input className="border-2 border-gray-100 rounded-lg p-2 w-20 text-center text-xs font-bold" placeholder={t('misc.create.discountPlaceholder', '-%')} value={miscDiscount} onChange={(e) => setmiscDiscount(e.target.value)} />
+                <input className="border-2 border-gray-100 rounded-lg p-2 w-28 text-center text-xs font-bold" placeholder={t('misc.create.oldPrice', 'Old Price')} value={miscWas} onChange={(e) => setmiscWas(e.target.value)} />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Description</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.description', 'Description')}</label>
             <textarea rows={3} value={miscDescription} onChange={(e) => setmiscDescription(e.target.value)} className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-[#10b981] resize-none" />
           </div>
 
           <div className="space-y-3">
-             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Gallery ({miscImages?.length || 0})</label>
+             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('misc.create.gallery', 'Gallery')} ({miscImages?.length || 0})</label>
             <div className="flex gap-3 overflow-x-auto pb-4 items-center no-scrollbar">
               {miscImages?.map((url, i) => (
                 <div key={i} className="relative flex-shrink-0 group">
@@ -258,13 +260,13 @@ function MiscUpdateModal({ pageCategory, onSuccess }) {
         </div>
 
         <div className="p-6 border-t bg-gray-50 flex gap-3">
-          <button onClick={() => {setmiscOpen(false); setTask("");}} className="flex-1 py-3 text-gray-500 font-bold text-xs uppercase tracking-widest hover:bg-gray-200 rounded-xl transition-all">Discard</button>
-          <button 
-            onClick={handleSubmit} 
+          <button onClick={() => {setmiscOpen(false); setTask("");}} className="flex-1 py-3 text-gray-500 font-bold text-xs uppercase tracking-widest hover:bg-gray-200 rounded-xl transition-all">{t('misc.update.discard', 'Discard')}</button>
+          <button
+            onClick={handleSubmit}
             disabled={uploading}
             className="flex-[2] py-3 bg-[#10b981] text-white font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg disabled:opacity-50 hover:bg-[#0da371] transition-all"
           >
-            {uploading ? "Processing..." : "Save Product Changes"}
+            {uploading ? t('misc.update.processing', 'Processing...') : t('misc.update.save', 'Save Product Changes')}
           </button>
         </div>
       </div>

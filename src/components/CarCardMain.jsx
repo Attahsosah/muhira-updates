@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useI18n } from '@/i18n/I18nContext';
 import { AiOutlineClockCircle } from "react-icons/ai"
 import { VscGear } from "react-icons/vsc";
 import { BsFillFuelPumpFill } from "react-icons/bs";
@@ -13,6 +14,7 @@ import Image from 'next/image';
 
 
 function CarCardMain({type, title, image, price, fuel, mileage, transmission, id, model, images, delId, car, year,  }) {
+    const { t } = useI18n();
     const { data: session } = useSession();
     const router = useRouter();
     const [carId, setCardId] = useContext(CardIdContext);
@@ -110,7 +112,7 @@ function CarCardMain({type, title, image, price, fuel, mileage, transmission, id
             <p className="text-[16px] font-[700] text-[#262626] mt-[15px]">{title} {model}</p>
 
             <div className="flex space-x-[6.89px]">
-                <div className="bg-[#5CA1FF] rounded-[4px] h-[19px] w-[73.39px] text-center pt-[2px] text-white text-[10px]">New</div>
+                <div className="bg-[#5CA1FF] rounded-[4px] h-[19px] w-[73.39px] text-center pt-[2px] text-white text-[10px]">{t('cars.new', 'New')}</div>
                 <p className="text-[#262626] text-[14px] font-[400]">{mileage} Kms</p>
 
             </div>
@@ -143,7 +145,7 @@ function CarCardMain({type, title, image, price, fuel, mileage, transmission, id
 
 
             <Link href={`/${id}`}>
-                <button  className=" h-[40px] w-[332.66px]  text-[#00360f] bg-white border bg-gradient-to-r  border-[#c69f41] text-[12px] mt-[16px] cursor-pointer hover:bg-[#c69f41] hover:text-gray-100 transform transition-all duration-300 ease-out">More Details</button>
+                <button  className=" h-[40px] w-[332.66px]  text-[#00360f] bg-white border bg-gradient-to-r  border-[#c69f41] text-[12px] mt-[16px] cursor-pointer hover:bg-[#c69f41] hover:text-gray-100 transform transition-all duration-300 ease-out">{t('cars.moreDetails', 'More Details')}</button>
 
             </Link>
 

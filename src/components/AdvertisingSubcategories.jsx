@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useI18n } from '@/i18n/I18nContext';
 import Image from "next/image";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
@@ -8,6 +9,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firestore"; 
 
 const AdvertisingSubcategories = () => {
+  const { t } = useI18n();
   const [isExpanded, setIsExpanded] = useState(false);
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -70,10 +72,10 @@ const AdvertisingSubcategories = () => {
             Visibility Tools
           </span> */}
           <h2 className="text-3xl font-black uppercase tracking-tighter mb-1 drop-shadow-md">
-            Advertising
+            {t('advertising.title', 'Advertising')}
           </h2>
           <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all group-hover:bg-[#bd8b31] group-hover:text-white animate-pulse">
-            <span>{isExpanded ? "View Less" : "View More"}</span>
+            <span>{isExpanded ? t('advertising.viewLess', 'View Less') : t('advertising.viewMore', 'View More')}</span>
             {isExpanded ? <FaChevronUp size={10} /> : <FaChevronDown size={10} />}
           </div>
         </div>
@@ -83,7 +85,7 @@ const AdvertisingSubcategories = () => {
       {isExpanded && (
         <div className="flex flex-wrap items-start justify-center gap-3 pt-2 animate-in fade-in slide-in-from-top-4 duration-500">
           {loading ? (
-             <p className="text-[10px] font-black uppercase text-gray-400 animate-pulse">Loading Categories...</p>
+             <p className="text-[10px] font-black uppercase text-gray-400 animate-pulse">{t('advertising.loadingCategories', 'Loading Categories...')}</p>
           ) : subcategories.length > 0 ? (
             subcategories.map((subcat) => (
               <button
@@ -97,7 +99,7 @@ const AdvertisingSubcategories = () => {
               </button>
             ))
           ) : (
-            <p className="text-[10px] font-black uppercase text-gray-400">No categories found</p>
+            <p className="text-[10px] font-black uppercase text-gray-400">{t('advertising.noCategories', 'No categories found')}</p>
           )}
         </div>
       )}

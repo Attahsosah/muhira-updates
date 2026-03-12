@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useContext } from 'react';
+import { useI18n } from '@/i18n/I18nContext';
 import ElectronicsCardMain from "./ElectronicsCardMain";
 import { useSession } from 'next-auth/react';
 import { 
@@ -15,6 +16,7 @@ import {
 } from './context/CrudContext';
 
 function ElectronicsCardsMain({ products }) {
+  const { t } = useI18n();
   const { data: session } = useSession();
   const [, setElectronicsOpen] = useContext(ElectronicsOpenContext);
   const [, setTask] = useContext(TaskContext);
@@ -46,7 +48,7 @@ function ElectronicsCardsMain({ products }) {
             onClick={handleAddClick}
             className="border-2 border-[#F75D34] text-[#bd8b31] px-6 md:px-10 py-2.5 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-[#bd8b31] hover:border-[#bd8b31] hover:text-white transition-all shadow-md active:scale-95"
           >
-            + Add Electronic Item
+            {t('electronics.addItem', '+ Add Electronic Item')}
           </button>
         )}
       </div>
@@ -64,7 +66,7 @@ function ElectronicsCardsMain({ products }) {
           ))
         ) : (
           <div className="col-span-full text-center py-20 text-gray-400 border-2 border-dashed border-gray-100 rounded-3xl">
-            No items found in this selection.
+            {t('electronics.noItems', 'No items found in this selection.')}
           </div>
         )}
       </div>

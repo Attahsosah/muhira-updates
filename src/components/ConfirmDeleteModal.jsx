@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
+import { useI18n } from '@/i18n/I18nContext';
 import { DeleteContext, DeleteIdContext, DeleteNameContext, DeleteTypeContext, DoneContext } from "./context/CrudContext";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firestore";
 
 export default function ConfirmDeleteModal() {
+    const { t } = useI18n();
     const [deleteOpen, setDeleteOpen] = useContext(DeleteContext);
     const [deleteId, setDeleteId] = useContext(DeleteIdContext);
     const [deleteType, setDeleteType] = useContext(DeleteTypeContext)
@@ -44,7 +46,7 @@ export default function ConfirmDeleteModal() {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                   <h3 className="text-3xl font-semibold">
-                    Confirm Deletion
+                    {t('confirmDelete.title', 'Confirm Deletion')}
                   </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -57,7 +59,7 @@ export default function ConfirmDeleteModal() {
                 </div>
                 {/*body*/}
                 <div className="relative p-6 block ">
-                    <p className="text-center">Are You sure you want to Delete this {deleteType}?</p>
+                    <p className="text-center">{t('confirmDelete.message', 'Are you sure you want to delete this')} {deleteType}?</p>
                     {/* <div className="flex justify-center space-x-[10px] mt-[10px]" >
                         <button className="text-red-400 cursor-pointer">Confirm</button>
                         <button className="text-gray-700 cursor-pointer">Cancel</button>
@@ -73,14 +75,14 @@ export default function ConfirmDeleteModal() {
                     type="button"
                     onClick={() => {setDeleteOpen(false); setDeleteId("")}}
                   >
-                    Close
+                    {t('confirmDelete.close', 'Close')}
                   </button>
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={confirmDelete}
                   >
-                    Confirm
+                    {t('confirmDelete.confirm', 'Confirm')}
                   </button>
                 </div>
               </div>

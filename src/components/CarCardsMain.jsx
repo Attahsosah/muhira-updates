@@ -1,5 +1,6 @@
 "use client";
- import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useI18n } from '@/i18n/I18nContext';
 import CarCardMain from './CarCardMain';
 import Filters from './Filters';
 import FiltersNew from "./FiltersNew";
@@ -14,6 +15,7 @@ import { DeleteContext, OpenContext, TaskContext } from './context/CrudContext';
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import { useSession } from 'next-auth/react';
 function CarCardsMain() {
+  const { t } = useI18n();
   const { data: session } = useSession();
 
   const [cars, setCars] = useContext(FetchedCarsContext);
@@ -79,7 +81,7 @@ else{
       <div className="block lg:mx-[60px] mt-[20px]">
         <div className="flex justify-center">
           { session?.user?.isAdmin && (
-            <button onClick={toggleModal} className="bg-transparent border border-[#FFA800] rounded-[1000px] text-[#FFA800] text-[14px] font-[400] px-[24px] py-[12px]  hover:bg-[#FFA800] hover:text-gray-900 transition-all duration-400 ease-out">Add a Car</button>
+            <button onClick={toggleModal} className="bg-transparent border border-[#FFA800] rounded-[1000px] text-[#FFA800] text-[14px] font-[400] px-[24px] py-[12px]  hover:bg-[#FFA800] hover:text-gray-900 transition-all duration-400 ease-out">{t('cars.addCar', 'Add a Car')}</button>
 
           )}
         </div>
@@ -89,7 +91,7 @@ else{
         
         {/* Title and filters */}
         <div className="hidden lg:block space-y-[8px]">
-          <p className="text-gray-900 text-[24px] font-[700]">Arrivals</p>
+          <p className="text-gray-900 text-[24px] font-[700]">{t('cars.arrivals', 'Arrivals')}</p>
           <Filters />
 
           {/* <FiltersNew /> */}

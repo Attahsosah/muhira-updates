@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useI18n } from '@/i18n/I18nContext';
 
 export default function LoginComponent() {
+  const { t } = useI18n();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -21,7 +23,7 @@ export default function LoginComponent() {
         redirect: false,
       });
       if (result?.error) {
-        setError("Failed to sign in. Check your credentials.");
+        setError(t('auth.loginFailed', 'Failed to sign in. Check your credentials.'));
       } else {
         router.push("/");
       }
@@ -37,7 +39,7 @@ export default function LoginComponent() {
         <div className="bg-black text-gray-200 bg-opacity-70 rounded-2xl p-10 my-40 shadow-lg w-[300px]">
           <div className="flex-col space-y-4">
             <div className="py-3 border-b-2 mb-3 flex justify-center">
-              <h3>Admin Login</h3>
+              <h3>{t('auth.adminLogin', 'Admin Login')}</h3>
             </div>
 
             {error && (
@@ -51,7 +53,7 @@ export default function LoginComponent() {
             <div className="flex-col group">
               <div className="flex justify-center">
                 <label className="border-b border-blue-700 group-hover:border-green-400 transform transition duration-500 ease-in-out">
-                  Email
+                  {t('auth.email', 'Email')}
                 </label>
               </div>
               <div className="flex space-x-2 px-5 py-1 justify-center">
@@ -61,7 +63,7 @@ export default function LoginComponent() {
                   type="email"
                   className="text-black rounded-lg p-2 focus:outline-none"
                   required
-                  placeholder="Enter your email here"
+                  placeholder={t('auth.emailPlaceholder', 'Enter your email here')}
                 />
               </div>
             </div>
@@ -69,7 +71,7 @@ export default function LoginComponent() {
             <div className="flex-col group">
               <div className="flex justify-center pt-4">
                 <label className="border-b border-blue-700 group-hover:border-green-400 transform transition duration-500 ease-in-out">
-                  Password
+                  {t('auth.password', 'Password')}
                 </label>
               </div>
               <div className="flex space-x-2 px-5 py-1 pb-5 justify-center">
@@ -78,7 +80,7 @@ export default function LoginComponent() {
                   onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   className="text-black rounded-lg p-2 focus:outline-none"
-                  placeholder="Enter your password here"
+                  placeholder={t('auth.passwordPlaceholder', 'Enter your password here')}
                   required
                 />
               </div>
@@ -90,7 +92,7 @@ export default function LoginComponent() {
                 disabled={loading}
                 className="text-gray-200 rounded-2xl px-5 py-3 bg-purple-800 shadow-md font-bold hover:shadow-xl transform transition duration-200 active:scale-90 disabled:opacity-50"
               >
-                {loading ? "Signing in..." : "Login"}
+                {loading ? t('auth.signingIn', 'Signing in...') : t('auth.login', 'Login')}
               </button>
             </div>
           </form>

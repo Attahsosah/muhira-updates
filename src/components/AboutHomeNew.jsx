@@ -1,14 +1,16 @@
 import React from 'react'
 import Image from "next/image";
+import { useI18n } from '@/i18n/I18nContext';
 function AboutHomeNew() {
+  const { t } = useI18n();
   return (
     <div className="lg:flex lg:justify-between lg:mx-[60px] lg:mt-[32px]">
         <div className="block lg:w-[50%]">
-            <p className="text-[32px] text-gray-700 font-[700] text-center z-30">ABOUT US</p>
+            <p className="text-[32px] text-gray-700 font-[700] text-center z-30">{t('about.aboutUs', 'ABOUT US')}</p>
             <div className="bg-yellow-400 h-[0.06em]  mx-auto"/>
 
-            <p className="text-gray-900 font-serif leading-10 mt-[20px]">At Muhira market, we are not just an eCommerce store; we are your reliable partner in bringing the world of shopping to your fingertips. Based in the heart of Burundi, we understand the unique needs of our community, and we are on a mission to redefine the online shopping experience.</p>
-            <button className="bg-green-900 h-[40px] w-[100px] text-gray-200 mt-[20px] flex mx-auto text-center px-auto py-auto">Shop Now</button>
+            <p className="text-gray-900 font-serif leading-10 mt-[20px]">{t('about.description', 'At Muhira market, we are not just an eCommerce store; we are your reliable partner in bringing the world of shopping to your fingertips. Based in the heart of Burundi, we understand the unique needs of our community, and we are on a mission to redefine the online shopping experience.')}</p>
+            <button className="bg-green-900 h-[40px] w-[100px] text-gray-200 mt-[20px] flex mx-auto text-center px-auto py-auto">{t('about.shopNow', 'Shop Now')}</button>
         </div>
 
         <div className="relative lg:w-[40vw] h-[350px]">
