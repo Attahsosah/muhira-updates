@@ -46,7 +46,7 @@ const Footer = () => {
                         <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-2">Legal & Trust</p>
                         <Link 
                             href="/privacy" 
-                            className="text-[#bd8b31] hover:text-white text-[11px] font-black uppercase tracking-[0.3em] transition-all"
+                            className="text-[#bd8b31] hover:text-white text-[11px] font-black uppercase tracking-[0.3em] transition-all animate-pulse"
                         >
                             Privacy Policy
                         </Link>
