@@ -7,7 +7,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { MiscImagesContext } from "@/components/context/MiscContext"; 
 import { FiX, FiCheckCircle, FiImage } from "react-icons/fi";
 
-// Added editData prop to handle existing category modifications
 function AddCategoryModal({ isOpen, onClose, onRefresh, parentCategory, editData = null }) {
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
@@ -16,12 +15,12 @@ function AddCategoryModal({ isOpen, onClose, onRefresh, parentCategory, editData
   
   const [miscImages, setmiscImages] = useContext(MiscImagesContext);
 
-  // Sync state when modal opens for editing
   useEffect(() => {
     if (isOpen) {
       if (editData) {
         setName(editData.name || "");
-        setPreview(editData.image || null);
+        // Support both field names 'image' and 'imageUrl'
+        setPreview(editData.imageUrl || editData.image || null);
       } else {
         setName("");
         setPreview(null);
@@ -34,12 +33,19 @@ function AddCategoryModal({ isOpen, onClose, onRefresh, parentCategory, editData
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
+      // Clean up previous blob if it exists
+      if (preview && preview.startsWith('blob:')) {
+        URL.revokeObjectURL(preview);
+      }
       setPreview(URL.createObjectURL(selectedFile));
       setmiscImages([selectedFile]); 
     }
   };
 
   const clearImage = () => {
+    if (preview && preview.startsWith('blob:')) {
+      URL.revokeObjectURL(preview);
+    }
     setFile(null);
     setPreview(null);
     setmiscImages([]);
@@ -49,47 +55,51 @@ function AddCategoryModal({ isOpen, onClose, onRefresh, parentCategory, editData
     if (!name.trim()) return;
     
     setLoading(true);
-    // If editing, start with the existing image URL
-    let imageUrl = editData?.image || "";
 
     try {
-      // 1. Upload new file if selected
-      let imagePath = editData?.imagePath || "";
+      // 1. Maintain existing data as fallback
+      let finalImageUrl = editData?.imageUrl || editData?.image || "";
+      let finalImagePath = editData?.imagePath || "";
+
+      // 2. Upload only if a new file is chosen
       if (file) {
-        imagePath = `subcategory_icons/${Date.now()}_${file.name}`;
-        const storageRef = ref(storage, imagePath);
+        const path = `subcategory_icons/${Date.now()}_${file.name}`;
+        const storageRef = ref(storage, path);
         const snapshot = await uploadBytes(storageRef, file);
-        imageUrl = await getDownloadURL(snapshot.ref);
+        finalImageUrl = await getDownloadURL(snapshot.ref);
+        finalImagePath = path;
       }
 
+      const payload = {
+        name: name.trim(),
+        // We save both to be safe, but keep 'image' as primary for your current setup
+        image: finalImageUrl,
+        imageUrl: finalImageUrl, 
+        imagePath: finalImagePath,
+        updatedAt: new Date(),
+      };
+
       if (editData?.id) {
-        // 2. UPDATE MODE
+        // UPDATE MODE
         const categoryRef = doc(db, "subcategories", editData.id);
-        await updateDoc(categoryRef, {
-          name: name.trim(),
-          image: imageUrl,
-          imagePath,
-          updatedAt: new Date(),
-        });
+        await updateDoc(categoryRef, payload);
       } else {
-        // 3. CREATE MODE
-        const finalParent = parentCategory || "electronics";
+        // CREATE MODE
         await addDoc(collection(db, "subcategories"), {
-          name: name.trim(),
-          parentCategory: finalParent,
-          image: imageUrl,
-          imagePath,
+          ...payload,
+          parentCategory: parentCategory || "electronics",
           createdAt: new Date(),
         });
       }
 
+      // Cleanup and Exit
       setName("");
       clearImage();
       onRefresh(); 
       onClose();
     } catch (error) {
       console.error("Error saving category:", error);
-      alert("System error: Could not save category changes.");
+      alert("Failed to save category. Please check your connection.");
     } finally {
       setLoading(false);
     }
@@ -98,73 +108,78 @@ function AddCategoryModal({ isOpen, onClose, onRefresh, parentCategory, editData
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-      <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/10">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+      <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden">
         
-        {/* Modal Header */}
+        {/* Header */}
         <div className="bg-[#bd8b31] p-6 text-white flex justify-between items-center">
           <div className="flex flex-col">
             <h2 className="text-xl font-black uppercase tracking-tighter">
               {editData ? "Edit Category" : "New Category"}
             </h2>
-            <span className="text-[10px] font-bold opacity-80 tracking-widest uppercase">
-              Target: {editData?.parentCategory || parentCategory || 'electronics'}
-            </span>
+            <p className="text-[9px] font-bold opacity-70 tracking-[0.2em] uppercase">
+              Section: {editData?.parentCategory || parentCategory || 'electronics'}
+            </p>
           </div>
-          <button onClick={onClose} className="hover:rotate-90 transition-transform bg-white/20 p-2 rounded-full">
-            <FiX size={18} />
+          <button onClick={onClose} className="hover:bg-white/20 p-2 rounded-full transition-colors">
+            <FiX size={20} />
           </button>
         </div>
 
         <div className="p-8 space-y-6">
+          {/* Name Input */}
           <div className="space-y-2">
             <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
-              Category Name
+              Category Title
             </label>
             <input 
-              placeholder="e.g. Helmets, Vests, Laptops" 
-              className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl outline-none focus:border-[#bd8b31] text-gray-900 font-bold transition-all"
+              placeholder="e.g. Smartphones" 
+              className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl outline-none focus:border-[#bd8b31] font-bold transition-all"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              autoFocus
             />
           </div>
 
+          {/* Image Upload */}
           <div className="space-y-2">
             <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
               Category Icon
             </label>
             {!preview ? (
-              <label className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:bg-gray-50 hover:border-[#bd8b31] transition-all group">
-                <FiImage size={28} className="text-gray-300 group-hover:text-[#bd8b31] mb-2" />
-                <span className="text-xs font-bold text-gray-400 group-hover:text-[#bd8b31]">Select Icon Image</span>
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-3xl cursor-pointer hover:bg-orange-50/50 hover:border-[#bd8b31]/40 transition-all group">
+                <FiImage size={32} className="text-gray-300 group-hover:text-[#bd8b31] mb-2" />
+                <span className="text-[10px] font-bold text-gray-400 group-hover:text-[#bd8b31] uppercase">Upload Image</span>
                 <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
               </label>
             ) : (
-              <div className="relative w-full h-36 rounded-2xl overflow-hidden border-2 border-gray-100 bg-gray-50 flex items-center justify-center">
-                <img src={preview} alt="Preview" className="h-24 w-24 object-contain" />
+              <div className="relative w-full h-40 rounded-3xl overflow-hidden border-2 border-gray-100 bg-gray-50 flex items-center justify-center">
+                <img src={preview} alt="Preview" className="h-28 w-28 object-contain drop-shadow-md" />
                 <button 
                   onClick={clearImage}
-                  className="absolute top-3 right-3 bg-red-500 text-white p-1.5 rounded-full shadow-lg hover:scale-110 transition-transform"
+                  className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full shadow-lg hover:scale-110 transition-transform"
                 >
                   <FiX size={14} />
                 </button>
-                <div className="absolute bottom-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase flex items-center gap-1.5 shadow-md">
-                  <FiCheckCircle /> {file ? "New image ready" : "Existing image"}
+                <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur text-white px-3 py-1.5 rounded-full text-[9px] font-black uppercase flex items-center gap-2">
+                  <FiCheckCircle className="text-green-400" /> {file ? "New File" : "Current"}
                 </div>
               </div>
             )}
           </div>
 
+          {/* Save Button */}
           <button 
             onClick={handleSave}
             disabled={loading || !name.trim()}
-            className="w-full bg-black text-[#bd8b31] py-5 rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-black/10 active:scale-[0.97] transition-all disabled:opacity-30 flex items-center justify-center gap-3"
+            className="w-full bg-black text-[#bd8b31] py-5 rounded-2xl font-black uppercase tracking-[0.2em] active:scale-[0.98] transition-all disabled:opacity-20 flex items-center justify-center gap-3"
           >
             {loading ? (
-              <div className="w-5 h-5 border-2 border-[#bd8b31] border-t-transparent rounded-full animate-spin" />
+              <span className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-[#bd8b31] border-t-transparent rounded-full animate-spin" />
+                Processing...
+              </span>
             ) : (
-              editData ? "Save Changes" : "Create Category"
+              editData ? "Update Category" : "Add Category"
             )}
           </button>
         </div>

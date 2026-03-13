@@ -1,35 +1,35 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firestore";
 
-/**
- * FirebaseImage — drop-in <img> replacement for Firebase Storage images.
- *
- * Props:
- *   src      — the stored download URL (may contain an expired token)
- *   path     — the Firebase Storage path (e.g. "electronics/1234-image.jpg")
- *              When provided and src fails to load, a fresh URL is fetched
- *              automatically using this path.
- *   fallback — content to render when no image can be loaded at all
- *   All other props are forwarded to the <img> element.
- */
 export default function FirebaseImage({ src, path, fallback = null, onError, ...props }) {
   const [currentSrc, setCurrentSrc] = useState(src);
   const [failed, setFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  // CRITICAL: Reset state when props change
+  // Without this, if you edit an image, the component might still
+  // be showing the "failed" state from the previous image.
+  useEffect(() => {
+    setCurrentSrc(src);
+    setFailed(false);
+    setRefreshing(false);
+  }, [src, path]);
+
   const handleError = async (e) => {
+    // Prevent infinite loops if the refresh also fails
     if (refreshing || failed) return;
 
-    // If we have the storage path, try to get a fresh download URL
     if (path) {
       setRefreshing(true);
       try {
-        const freshUrl = await getDownloadURL(ref(storage, path));
+        const storageRef = ref(storage, path);
+        const freshUrl = await getDownloadURL(storageRef);
         setCurrentSrc(freshUrl);
-      } catch {
+      } catch (err) {
+        console.error("FirebaseImage recovery failed:", err);
         setFailed(true);
       } finally {
         setRefreshing(false);
@@ -41,7 +41,14 @@ export default function FirebaseImage({ src, path, fallback = null, onError, ...
     onError?.(e);
   };
 
-  if (failed || !currentSrc) return fallback;
+  if (failed || (!currentSrc && !path)) return fallback;
 
-  return <img src={currentSrc} onError={handleError} {...props} />;
+  return (
+    <img 
+      src={currentSrc} 
+      onError={handleError} 
+      {...props} 
+      alt={props.alt || "Muhira Updates Item"} 
+    />
+  );
 }

@@ -30,7 +30,15 @@ const ElectronicsSubcategories = () => {
         where("parentCategory", "==", "electronics")
       );
       const snap = await getDocs(q);
-      const fetchedSubs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const fetchedSubs = snap.docs.map(d => {
+        const data = d.data();
+        return { 
+          id: d.id, 
+          ...data,
+          // Support all possible field naming conventions for the URL
+          displayImage: data.imageUrl || data.image || "" 
+        };
+      });
       setSubcategories(fetchedSubs);
     } catch (error) {
       console.error("Error fetching electronics subcategories:", error);
@@ -39,11 +47,12 @@ const ElectronicsSubcategories = () => {
     }
   };
 
+  // Re-fetch whenever the section expands to ensure admin changes are visible
   useEffect(() => {
-    if (isExpanded && subcategories.length === 0) {
+    if (isExpanded) {
       fetchRealSubs();
     }
-  }, [isExpanded, subcategories.length]);
+  }, [isExpanded]);
 
   const handleRedirect = (id) => {
     router.push(`/misc?type=${id}`);
@@ -90,21 +99,15 @@ const ElectronicsSubcategories = () => {
           src="https://i.ibb.co/2YtkYYJs/Electronics.jpg"
           alt="Electronics"
           className="object-cover transition-transform duration-700 group-hover:scale-110"
+          priority
         />
-
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 text-center px-4">
           <h2 className="text-3xl font-black uppercase tracking-tighter mb-1">
             {t("electronics.title", "Electronics")}
           </h2>
-
-          <div className="flex items-center gap-2 bg-white text-black animate-pulse px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all group-hover:bg-[#bd8b31] group-hover:text-white">
-            <span>
-              {isExpanded
-                ? t("electronics.viewLess", "View Less")
-                : t("electronics.viewMore", "View More")}
-            </span>
+          <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all group-hover:bg-[#bd8b31] group-hover:text-white">
+            <span>{isExpanded ? "View Less" : "View More"}</span>
             {isExpanded ? <FiChevronUp size={10} /> : <FiChevronDown size={10} />}
           </div>
         </div>
@@ -117,7 +120,6 @@ const ElectronicsSubcategories = () => {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.4 }}
             className="grid grid-cols-3 sm:flex sm:flex-wrap items-start justify-center gap-4 pt-4"
           >
             {loading ? (
@@ -130,22 +132,22 @@ const ElectronicsSubcategories = () => {
                   key={subcat.id}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.07 }}
-                  className="relative flex flex-col items-center gap-2 group mb-2"
+                  transition={{ delay: i * 0.05 }}
+                  className="relative flex flex-col items-center gap-2 group mb-4"
                 >
                   {session?.user?.isAdmin && (
-                    <div className="absolute top-0 right-0 z-30 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                    <div className="absolute -top-1 -right-1 z-30 flex gap-1 opacity-0 group-hover:opacity-100 transition-all scale-75 sm:scale-100">
                       <button
                         onClick={(e) => openEditModal(e, subcat)}
-                        className="p-1.5 bg-white/95 backdrop-blur shadow-xl rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition-all"
+                        className="p-1.5 bg-white shadow-xl rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition-all"
                       >
-                        <FiEdit2 size={9} />
+                        <FiEdit2 size={12} />
                       </button>
                       <button
                         onClick={(e) => handleDelete(e, subcat.id)}
-                        className="p-1.5 bg-white/95 backdrop-blur shadow-xl rounded-full text-red-600 hover:bg-red-600 hover:text-white transition-all"
+                        className="p-1.5 bg-white shadow-xl rounded-full text-red-600 hover:bg-red-600 hover:text-white transition-all"
                       >
-                        <FiTrash2 size={9} />
+                        <FiTrash2 size={12} />
                       </button>
                     </div>
                   )}
@@ -154,25 +156,20 @@ const ElectronicsSubcategories = () => {
                     onClick={() => handleRedirect(subcat.id)}
                     className="flex flex-col items-center gap-2"
                   >
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group-hover:border-[#bd8b31] group-hover:shadow-lg transition-all duration-300">
-                      {subcat.image || subcat.imageUrl ? (
-                        <FirebaseImage
-                          src={subcat.image || subcat.imageUrl}
-                          path={subcat.imagePath}
-                          alt={subcat.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          fallback={
-                            <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300 text-2xl">📱</div>
-                          }
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300 text-2xl">
-                          📱
-                        </div>
-                      )}
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group-hover:border-[#bd8b31] group-hover:shadow-lg transition-all duration-300 bg-white">
+                      <FirebaseImage
+                        // Keyed by ID + ImageURL to force reset on edit
+                        key={`${subcat.id}-${subcat.displayImage}`}
+                        src={subcat.displayImage}
+                        path={subcat.imagePath} 
+                        alt={subcat.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        fallback={
+                          <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300 text-xl">📱</div>
+                        }
+                      />
                     </div>
-
-                    <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase text-center leading-tight tracking-widest group-hover:text-black transition-colors">
+                    <span className="text-[9px] font-black text-gray-500 uppercase text-center leading-tight tracking-tighter group-hover:text-black w-16 sm:w-20 truncate">
                       {subcat.name}
                     </span>
                   </button>
