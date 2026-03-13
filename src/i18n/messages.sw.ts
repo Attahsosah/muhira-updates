@@ -369,6 +369,11 @@ export const messagesSw = {
     confirmEmail: "Utapokea barua pepe ikithibitishwa.",
     submitting: "Inatuma...",
     submit: "Wasilisha Nambari ya Malipo",
+    proofLabel: "Uthibitisho wa Malipo",
+    proofOptional: "(si lazima)",
+    uploadFile: "Pakia Faili",
+    takePhoto: "Piga Picha",
+    uploadingProof: "Inapakia uthibitisho...",
   },
 
   // Filters

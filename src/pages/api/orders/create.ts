@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     customerEmail,
     customerName,
     paypalOrderId,
+    proofImageUrl,
   } = req.body;
 
   if (!productId || !productName || amount === undefined || !paymentMethod || !customerEmail) {
@@ -39,6 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       customerEmail,
       customerName: customerName || '',
       paypalOrderId: paypalOrderId || '',
+      proofImageUrl: proofImageUrl || '',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });

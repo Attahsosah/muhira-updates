@@ -1,16 +1,30 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useI18n } from '@/i18n/I18nContext';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firestore';
 
 function MobileMoneyForm({ productId, productName, productType, amount }) {
   const { t } = useI18n();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [transactionId, setTransactionId] = useState('');
+  const [proofFile, setProofFile] = useState(null);
+  const [proofPreview, setProofPreview] = useState(null);
+  const [uploadingProof, setUploadingProof] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
 
   const mobileNumber = process.env.NEXT_PUBLIC_MOBILE_MONEY_NUMBER || '+257xxxxxxxx';
+
+  const handleProofSelected = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setProofFile(file);
+    setProofPreview(URL.createObjectURL(file));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +35,15 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
     setLoading(true);
     setError('');
     try {
+      let proofImageUrl = '';
+      if (proofFile) {
+        setUploadingProof(true);
+        const storageRef = ref(storage, `payment-proofs/${Date.now()}-${proofFile.name}`);
+        const snapshot = await uploadBytes(storageRef, proofFile);
+        proofImageUrl = await getDownloadURL(snapshot.ref);
+        setUploadingProof(false);
+      }
+
       const res = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,12 +56,14 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
           transactionId,
           customerEmail: email,
           customerName: name,
+          proofImageUrl,
         }),
       });
       if (!res.ok) throw new Error('Failed to submit order');
       setSuccess(true);
     } catch {
       setError(t('mobileMoney.genericError', 'Something went wrong. Please try again.'));
+      setUploadingProof(false);
     } finally {
       setLoading(false);
     }
@@ -105,14 +130,73 @@ function MobileMoneyForm({ productId, productName, productType, amount }) {
         />
       </div>
 
+      {/* Proof of Payment */}
+      <div>
+        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide">
+          {t('mobileMoney.proofLabel', 'Proof of Payment')} <span className="text-gray-400 normal-case font-normal">{t('mobileMoney.proofOptional', '(optional)')}</span>
+        </label>
+
+        {proofPreview ? (
+          <div className="relative rounded-xl overflow-hidden border border-gray-200 mb-2">
+            <img src={proofPreview} alt="Proof" className="w-full max-h-48 object-cover" />
+            <button
+              type="button"
+              onClick={() => { setProofFile(null); setProofPreview(null); }}
+              className="absolute top-2 right-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center shadow"
+            >✕</button>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex-1 border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs font-bold text-gray-500 hover:border-[#bd8b31] hover:text-[#bd8b31] transition-all flex flex-col items-center gap-1"
+            >
+              <span className="text-lg">📎</span>
+              {t('mobileMoney.uploadFile', 'Upload File')}
+            </button>
+            <button
+              type="button"
+              onClick={() => cameraInputRef.current?.click()}
+              className="flex-1 border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs font-bold text-gray-500 hover:border-[#bd8b31] hover:text-[#bd8b31] transition-all flex flex-col items-center gap-1"
+            >
+              <span className="text-lg">📷</span>
+              {t('mobileMoney.takePhoto', 'Take Photo')}
+            </button>
+          </div>
+        )}
+
+        {/* File picker (gallery/files) */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleProofSelected}
+        />
+        {/* Camera capture */}
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="hidden"
+          onChange={handleProofSelected}
+        />
+      </div>
+
       {error && <p className="text-red-500 text-xs">{error}</p>}
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || uploadingProof}
         className="w-full bg-[#bd8b31] text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#a1772a] transition-all disabled:opacity-60"
       >
-        {loading ? t('mobileMoney.submitting', 'Submitting...') : t('mobileMoney.submit', 'Submit Payment Reference')}
+        {uploadingProof
+          ? t('mobileMoney.uploadingProof', 'Uploading proof...')
+          : loading
+          ? t('mobileMoney.submitting', 'Submitting...')
+          : t('mobileMoney.submit', 'Submit Payment Reference')}
       </button>
     </form>
   );

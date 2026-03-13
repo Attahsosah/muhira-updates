@@ -369,6 +369,11 @@ export const messagesRw = {
     confirmEmail: "Uzakira imeyili igihe ryemejwe.",
     submitting: "Kohereza...",
     submit: "Ohereza Inomero y'Ubwishyu",
+    proofLabel: "Icyemezo cy'Ubwishyu",
+    proofOptional: "(si ngombwa)",
+    uploadFile: "Ohereza Dosiye",
+    takePhoto: "Fota Ifoto",
+    uploadingProof: "Kohereza icyemezo...",
   },
 
   // Filters

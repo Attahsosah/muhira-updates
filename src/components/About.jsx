@@ -7,13 +7,13 @@ import { MdEdit } from "react-icons/md";
 import { SectionContentContext, SectionDataContext, SectionModalContext } from './context/OrderContext';
 
 function About() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [sections, setSections] = useState([]);
   const [user, setUser] = useState(null);
   
   const { setSectionModalOpen } = useContext(SectionModalContext) || {};
   const { setSectionData } = useContext(SectionDataContext) || {};
-  const { setSectionContent } = useContext(SectionContentContext) || {};
+  const [, setSectionContent] = useContext(SectionContentContext) || [];
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -87,12 +87,11 @@ function About() {
 
               {sections.filter(section => section.name === "about").map((item, index) => (
                 <div key={index} className="relative">
-                  {/* UPDATED: Added text-justify and style for hyphens */}
-                  <p 
+                  <p
                     className="text-gray-200 font-serif text-lg md:text-xl leading-[2.2] text-justify first-letter:text-6xl first-letter:font-bold first-letter:text-[#bd8b31] first-letter:mr-3 first-letter:float-left"
                     style={{ hyphens: 'auto', WebkitHyphens: 'auto' }}
                   >
-                    {item.content}
+                    {lang === 'en' ? item.content : (item[`content_${lang}`] || item.content)}
                   </p>
                 </div>
               ))}

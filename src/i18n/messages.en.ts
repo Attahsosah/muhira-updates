@@ -369,6 +369,11 @@ export const messagesEn = {
     confirmEmail: "You'll receive an email when it's confirmed.",
     submitting: "Submitting...",
     submit: "Submit Payment Reference",
+    proofLabel: "Proof of Payment",
+    proofOptional: "(optional)",
+    uploadFile: "Upload File",
+    takePhoto: "Take Photo",
+    uploadingProof: "Uploading proof...",
   },
 
   // Filters

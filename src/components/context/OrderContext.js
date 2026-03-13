@@ -20,7 +20,7 @@ export const OrdersProvider = ({ children }) => {
         >
           <SectionDataContext.Provider value={[sectionData, setSectionData]}>
             <SectionContentContext.Provider
-              value={[sectionContent, sectionContent]}
+              value={[sectionContent, setSectionContent]}
             >
               {children}
             </SectionContentContext.Provider>

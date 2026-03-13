@@ -369,6 +369,11 @@ export const messagesFr = {
     confirmEmail: "Vous recevrez un e-mail lorsqu'elle sera confirmée.",
     submitting: "Envoi...",
     submit: "Soumettre la référence de paiement",
+    proofLabel: "Preuve de paiement",
+    proofOptional: "(optionnel)",
+    uploadFile: "Télécharger un fichier",
+    takePhoto: "Prendre une photo",
+    uploadingProof: "Téléchargement de la preuve...",
   },
 
   // Filters
