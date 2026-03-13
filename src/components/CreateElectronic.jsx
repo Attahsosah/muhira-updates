@@ -36,7 +36,8 @@ function CreateElectronic() {
     const file = e.target.files[0];
     if (!file) return;
 
-    const storageRef = ref(storage, `electronics/${Date.now()}-${file.name}`);
+    const imagePath = `electronics/${Date.now()}-${file.name}`;
+    const storageRef = ref(storage, imagePath);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     setUploading(true);
@@ -50,7 +51,8 @@ function CreateElectronic() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setImages((prev) => [...prev, downloadURL]); // Add URL to context array
+          // Store both the URL and the path so stale tokens can be refreshed
+          setImages((prev) => [...prev, { url: downloadURL, path: imagePath }]);
           setUploading(false);
         });
       }
@@ -85,7 +87,8 @@ function CreateElectronic() {
         price: Number(price),
         subcategory,
         description,
-        images: images,
+        images: images.map(img => img.url || img),
+        imagePaths: images.map(img => img.path || ""),
         createdAt: new Date(),
       });
 
@@ -133,9 +136,9 @@ function CreateElectronic() {
             
             <div className="flex flex-wrap gap-4">
               {/* Image Previews */}
-              {images.map((url, index) => (
+              {images.map((img, index) => (
                 <div key={index} className="relative w-24 h-24 rounded-xl overflow-hidden border">
-                  <img src={url} alt="preview" className="w-full h-full object-cover" />
+                  <img src={img.url || img} alt="preview" className="w-full h-full object-cover" />
                   <button 
                     onClick={() => removeImage(index)}
                     className="absolute top-1 right-1 text-red-500 bg-white rounded-full"

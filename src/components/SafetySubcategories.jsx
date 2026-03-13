@@ -10,6 +10,7 @@ import { collection, getDocs, query, where, doc, deleteDoc } from "firebase/fire
 import { db } from "../../firestore"; 
 import { useI18n } from "@/i18n/I18nContext";
 import AddCategoryModal from "@/components/AddCategoryModal";
+import FirebaseImage from "@/components/FirebaseImage";
 
 const SafetySubcategories = () => {
   const { t } = useI18n(); 
@@ -145,10 +146,12 @@ const SafetySubcategories = () => {
                   {/* Updated Container: Removed padding and changed to object-cover */}
                   <div className="relative w-full aspect-square bg-white rounded-[2rem] border-2 border-gray-50 flex items-center justify-center overflow-hidden shadow-sm transition-all group-hover:border-[#bd8b31] group-hover:shadow-lg group-hover:-translate-y-1 active:scale-95">
                     {subcat.image || subcat.imageUrl ? (
-                      <img 
-                        src={subcat.image || subcat.imageUrl} 
-                        alt={subcat.name} 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                      <FirebaseImage
+                        src={subcat.image || subcat.imageUrl}
+                        path={subcat.imagePath}
+                        alt={subcat.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        fallback={<FaShieldAlt className="text-gray-200 text-3xl group-hover:text-[#bd8b31]/20 transition-colors" />}
                       />
                     ) : (
                       <FaShieldAlt className="text-gray-200 text-3xl group-hover:text-[#bd8b31]/20 transition-colors" />

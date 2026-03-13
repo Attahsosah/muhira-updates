@@ -54,18 +54,21 @@ function AddCategoryModal({ isOpen, onClose, onRefresh, parentCategory, editData
 
     try {
       // 1. Upload new file if selected
+      let imagePath = editData?.imagePath || "";
       if (file) {
-        const storageRef = ref(storage, `subcategory_icons/${Date.now()}_${file.name}`);
+        imagePath = `subcategory_icons/${Date.now()}_${file.name}`;
+        const storageRef = ref(storage, imagePath);
         const snapshot = await uploadBytes(storageRef, file);
         imageUrl = await getDownloadURL(snapshot.ref);
       }
-      
+
       if (editData?.id) {
         // 2. UPDATE MODE
         const categoryRef = doc(db, "subcategories", editData.id);
         await updateDoc(categoryRef, {
           name: name.trim(),
           image: imageUrl,
+          imagePath,
           updatedAt: new Date(),
         });
       } else {
@@ -75,6 +78,7 @@ function AddCategoryModal({ isOpen, onClose, onRefresh, parentCategory, editData
           name: name.trim(),
           parentCategory: finalParent,
           image: imageUrl,
+          imagePath,
           createdAt: new Date(),
         });
       }
